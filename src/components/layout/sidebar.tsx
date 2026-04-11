@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -14,6 +15,8 @@ import {
   ShieldCheck,
   MapPin,
   ChevronDown,
+  Menu,
+  X,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -49,17 +52,20 @@ function NavItem({
   label,
   badge,
   exact = false,
+  onClick,
 }: {
   to: string;
   icon: React.ElementType;
   label: string;
   badge?: React.ReactNode;
   exact?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <NavLink
       to={to}
       end={exact}
+      onClick={onClick}
       className={({ isActive }) =>
         cn(
           "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all relative",
@@ -95,6 +101,7 @@ function NavItem({
 export function Sidebar() {
   const { user } = useAuth();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const kycStatus = user?.kycStatus || "pending";
   const isVerified = kycStatus === "approved";
   const isManager = user?.role === "manager";
@@ -108,8 +115,49 @@ export function Sidebar() {
 
   const isVerificationActive = location.pathname === "/verification";
 
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r border-slate-100 flex flex-col shadow-sm">
+    <>
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4">
+        <ClassfunLogo variant="full" size="sm" animated />
+        <button
+          onClick={toggleMobileMenu}
+          className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Backdrop for mobile */}
+      {mobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 h-screen w-64 bg-white border-r border-slate-100 flex flex-col shadow-sm",
+          "transition-transform duration-300 ease-in-out",
+          "lg:translate-x-0",
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        {/* Mobile close button */}
+        <div className="lg:hidden absolute top-4 right-4">
+          <button
+            onClick={closeMobileMenu}
+            className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
         <ClassfunLogo variant="full" size="sm" animated />
@@ -139,6 +187,7 @@ export function Sidebar() {
                 icon={item.icon}
                 label={item.label}
                 exact={item.to === "/"}
+                onClick={closeMobileMenu}
               />
             ))}
           </div>
@@ -161,12 +210,14 @@ export function Sidebar() {
                   to={item.to}
                   icon={item.icon}
                   label={item.label}
+                  onClick={closeMobileMenu}
                 />
               ))}
 
             {/* Verification with status dot */}
             <NavLink
               to="/verification"
+              onClick={closeMobileMenu}
               className={cn(
                 "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all relative",
                 isVerificationActive
@@ -199,6 +250,7 @@ export function Sidebar() {
           </div>
         </div>
       </nav>
-    </aside>
+      </aside>
+    </>
   );
 }
