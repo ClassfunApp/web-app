@@ -1,5 +1,37 @@
 @import "tailwindcss";
 
+/* ─── Classfun Brand Colors ──────────────────────────────────
+   Override Tailwind's indigo palette with Class Purple.
+   All existing `indigo-*` utilities now render brand purple.
+   ─────────────────────────────────────────────────────────── */
+@theme {
+  /* Class Purple (replaces indigo) */
+  --color-indigo-50:  #F0EDFF;
+  --color-indigo-100: #E0D8FF;
+  --color-indigo-200: #C5B5FF;
+  --color-indigo-300: #A48EF5;
+  --color-indigo-400: #8B71ED;
+  --color-indigo-500: #7055DC;
+  --color-indigo-600: #5B45D0;  /* primary brand purple */
+  --color-indigo-700: #4A38B8;
+  --color-indigo-800: #3A2C90;
+  --color-indigo-900: #2A1F68;
+  --color-indigo-950: #1A1240;
+
+  /* Fun Orange */
+  --color-cf-orange:      #E87600;
+  --color-cf-orange-dark: #C46200;
+  --color-cf-orange-50:   #FFF5E6;
+  --color-cf-orange-100:  #FFE4B8;
+
+  /* Deep Navy (dark backgrounds, left panels) */
+  --color-cf-navy:       #1B2B4A;
+  --color-cf-navy-light: #243559;
+
+  /* Yellow Gold */
+  --color-cf-gold: #F5B400;
+}
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -37,27 +69,31 @@ body {
   to   { background-position: 200% center; }
 }
 
-@keyframes pulse-dot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(1.4); opacity: 0.7; }
-}
-
 @keyframes count-up {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes draw-swoosh {
+  from { stroke-dashoffset: 120; }
+  to   { stroke-dashoffset: 0; }
+}
+
 /* ─── Animation utilities ────────────────────────────────────── */
-.animate-fade-in    { animation: fade-in 0.3s ease forwards; }
-.animate-slide-up   { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-slide-down { animation: slide-down 0.25s ease forwards; }
-.animate-slide-in-left { animation: slide-in-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-scale-in   { animation: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-count-up   { animation: count-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fade-in        { animation: fade-in 0.3s ease forwards; }
+.animate-slide-up       { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-slide-down     { animation: slide-down 0.25s ease forwards; }
+.animate-slide-in-left  { animation: slide-in-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-scale-in       { animation: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-count-up       { animation: count-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-draw-swoosh    {
+  stroke-dasharray: 120;
+  animation: draw-swoosh 0.7s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 /* Staggered children */
-.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(1) { animation-delay:   0ms; }
+.stagger-children > *:nth-child(2) { animation-delay:  60ms; }
 .stagger-children > *:nth-child(3) { animation-delay: 120ms; }
 .stagger-children > *:nth-child(4) { animation-delay: 180ms; }
 .stagger-children > *:nth-child(5) { animation-delay: 240ms; }
@@ -79,7 +115,7 @@ body {
 ::-webkit-scrollbar-thumb  { background: #cbd5e1; border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* ─── Page-level entry (applied to main content) ────────────── */
+/* ─── Page-level entry ───────────────────────────────────────── */
 .page-enter {
   animation: slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -91,4 +127,13 @@ body {
 .card-hover:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px -4px rgba(0,0,0,0.10);
+}
+
+/* ─── Classfun logo swoosh ───────────────────────────────────── */
+.cf-logo-swoosh {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+}
+.cf-logo-swoosh.animate {
+  animation: draw-swoosh 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

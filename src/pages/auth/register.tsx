@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/use-auth';
 import { Input } from '../../components/ui/input';
 import { Select } from '../../components/ui/select';
 import { Button } from '../../components/ui/button';
+import { ClassfunLogo } from '../../components/ui/classfun-logo';
 import type { BillingRegion } from '../../types';
 
 export default function RegisterPage() {
@@ -33,16 +34,20 @@ export default function RegisterPage() {
   const passwordStrength = (() => {
     const p = form.password;
     if (!p) return 0;
-    let score = 0;
-    if (p.length >= 8) score++;
-    if (/[A-Z]/.test(p)) score++;
-    if (/[0-9]/.test(p)) score++;
-    if (/[^A-Za-z0-9]/.test(p)) score++;
-    return score;
+    let s = 0;
+    if (p.length >= 8) s++;
+    if (/[A-Z]/.test(p)) s++;
+    if (/[0-9]/.test(p)) s++;
+    if (/[^A-Za-z0-9]/.test(p)) s++;
+    return s;
   })();
 
-  const strengthColors = ['bg-red-400', 'bg-orange-400', 'bg-yellow-400', 'bg-emerald-400'];
-  const strengthLabels = ['Weak', 'Fair', 'Good', 'Strong'];
+  const strengthConfig = [
+    { color: 'bg-red-400',    label: 'Weak' },
+    { color: 'bg-orange-400', label: 'Fair' },
+    { color: 'bg-yellow-400', label: 'Good' },
+    { color: 'bg-emerald-500', label: 'Strong' },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,37 +66,33 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex bg-[#f0f3f9]">
-      {/* Left decorative panel */}
-      <div className="hidden lg:flex lg:w-[42%] bg-indigo-600 p-12 flex-col justify-between relative overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500 rounded-full opacity-50 blur-3xl" />
-        <div className="absolute -bottom-32 -right-16 w-80 h-80 bg-violet-600 rounded-full opacity-40 blur-3xl" />
+      {/* Left panel */}
+      <div className="hidden lg:flex lg:w-[44%] bg-[#1B2B4A] p-12 flex-col justify-between relative overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-indigo-600 rounded-full opacity-20 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 right-0 w-64 h-64 bg-[#E87600] rounded-full opacity-10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-12 w-72 h-72 bg-indigo-800 rounded-full opacity-30 blur-3xl pointer-events-none" />
 
         <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-12">
-            <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CF</span>
-            </div>
-            <span className="text-white font-bold text-lg">Classfun</span>
-          </div>
+          <ClassfunLogo variant="wordmark" size="2xl" animated className="mb-12" />
 
           <h2 className="text-3xl font-bold text-white leading-snug">
             Start managing your activity center today
           </h2>
-          <p className="mt-4 text-indigo-200 text-sm leading-relaxed">
+          <p className="mt-4 text-slate-400 text-sm leading-relaxed max-w-xs">
             Join hundreds of centers already using Classfun to simplify their operations.
           </p>
         </div>
 
-        <div className="relative z-10 space-y-3">
+        <div className="relative z-10 space-y-3.5">
           {[
             'No credit card required',
             '30-day free trial',
             'Cancel anytime',
             'Full feature access from day 1',
-          ].map((f) => (
-            <div key={f} className="flex items-center gap-2 text-indigo-100 text-sm">
-              <CheckCircle2 size={15} className="text-indigo-300 shrink-0" />
-              <span>{f}</span>
+          ].map((text) => (
+            <div key={text} className="flex items-center gap-3 text-slate-300 text-sm">
+              <CheckCircle2 size={16} className="text-[#E87600] shrink-0" />
+              <span>{text}</span>
             </div>
           ))}
         </div>
@@ -101,11 +102,8 @@ export default function RegisterPage() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md animate-slide-up">
           {/* Mobile logo */}
-          <div className="flex lg:hidden items-center gap-2 mb-8">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CF</span>
-            </div>
-            <span className="text-slate-800 font-bold text-lg">Classfun</span>
+          <div className="flex lg:hidden justify-center mb-10">
+            <ClassfunLogo variant="full" size="lg" animated />
           </div>
 
           <div className="mb-8">
@@ -125,7 +123,7 @@ export default function RegisterPage() {
               <Input label="Full name" value={form.fullName} onChange={set('fullName')} required placeholder="John Doe" autoComplete="name" />
               <Input label="Email address" type="email" value={form.email} onChange={set('email')} required placeholder="you@example.com" autoComplete="email" />
 
-              {/* Password with strength meter */}
+              {/* Password + strength meter */}
               <div className="space-y-1.5">
                 <div className="relative">
                   <Input
@@ -149,7 +147,6 @@ export default function RegisterPage() {
                   </button>
                 </div>
 
-                {/* Strength bar */}
                 {form.password && (
                   <div className="space-y-1 animate-fade-in">
                     <div className="flex gap-1">
@@ -157,14 +154,18 @@ export default function RegisterPage() {
                         <div
                           key={i}
                           className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                            i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-slate-100'
+                            i < passwordStrength
+                              ? strengthConfig[passwordStrength - 1].color
+                              : 'bg-slate-100'
                           }`}
                         />
                       ))}
                     </div>
                     <p className="text-[11px] text-slate-400">
-                      Password strength:{' '}
-                      <span className="font-semibold text-slate-600">{strengthLabels[passwordStrength - 1] ?? 'Weak'}</span>
+                      Strength:{' '}
+                      <span className="font-semibold text-slate-600">
+                        {strengthConfig[passwordStrength - 1]?.label ?? 'Weak'}
+                      </span>
                     </p>
                   </div>
                 )}
@@ -176,7 +177,7 @@ export default function RegisterPage() {
                 value={form.billingRegion}
                 onChange={set('billingRegion')}
                 options={[
-                  { value: 'nigeria', label: '🇳🇬 Nigeria (NGN)' },
+                  { value: 'nigeria',  label: '🇳🇬 Nigeria (NGN)' },
                   { value: 'overseas', label: '🌍 Overseas (USD)' },
                 ]}
               />
@@ -194,7 +195,7 @@ export default function RegisterPage() {
 
           <p className="mt-6 text-center text-sm text-slate-500">
             Already have an account?{' '}
-            <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
+            <Link to="/login" className="text-[#E87600] hover:text-[#C46200] font-semibold transition-colors">
               Sign in
             </Link>
           </p>

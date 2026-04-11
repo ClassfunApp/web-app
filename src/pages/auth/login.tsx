@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../hooks/use-auth';
 import { Input } from '../../components/ui/input';
 import { Button } from '../../components/ui/button';
+import { ClassfunLogo } from '../../components/ui/classfun-logo';
 
 export default function LoginPage() {
   const { login, isAuthenticated, isContactVerified } = useAuth();
@@ -14,7 +15,6 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redirect already-logged-in users
   useEffect(() => {
     if (isAuthenticated) {
       navigate(isContactVerified ? '/' : '/verify-contact', { replace: true });
@@ -37,56 +37,49 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex bg-[#f0f3f9]">
-      {/* Left panel — decorative */}
-      <div className="hidden lg:flex lg:w-[42%] bg-indigo-600 p-12 flex-col justify-between relative overflow-hidden">
-        {/* Background blobs */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500 rounded-full opacity-50 blur-3xl" />
-        <div className="absolute -bottom-32 -right-16 w-80 h-80 bg-violet-600 rounded-full opacity-40 blur-3xl" />
+      {/* Left decorative panel */}
+      <div className="hidden lg:flex lg:w-[44%] bg-[#1B2B4A] p-12 flex-col justify-between relative overflow-hidden">
+        {/* Background orbs */}
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-indigo-600 rounded-full opacity-20 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-0 w-64 h-64 bg-[#E87600] rounded-full opacity-10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-12 w-72 h-72 bg-indigo-800 rounded-full opacity-30 blur-3xl pointer-events-none" />
 
         <div className="relative z-10">
-          <div className="flex items-center gap-2.5 mb-12">
-            <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CF</span>
-            </div>
-            <span className="text-white font-bold text-lg">Classfun</span>
-          </div>
+          <ClassfunLogo variant="wordmark" size="2xl" animated className="mb-12" />
 
           <h2 className="text-3xl font-bold text-white leading-snug">
             Manage your activity center with ease
           </h2>
-          <p className="mt-4 text-indigo-200 text-sm leading-relaxed">
+          <p className="mt-4 text-slate-400 text-sm leading-relaxed max-w-xs">
             Attendance, enrollments, payments, and staff — all in one beautiful dashboard.
           </p>
         </div>
 
-        {/* Feature pills */}
-        <div className="relative z-10 space-y-3">
+        <div className="relative z-10 space-y-3.5">
           {[
-            '✅  QR-code sign-in & sign-out',
-            '💳  Paystack-powered fee collection',
-            '👨‍👩‍👧  Family & guardian portal',
-            '📊  Real-time attendance reports',
-          ].map((f) => (
-            <div key={f} className="flex items-center gap-2 text-indigo-100 text-sm">
-              <span>{f}</span>
+            { icon: '✅', text: 'QR-code sign-in & sign-out' },
+            { icon: '💳', text: 'Paystack-powered fee collection' },
+            { icon: '👨‍👩‍👧', text: 'Family & guardian portal' },
+            { icon: '📊', text: 'Real-time attendance reports' },
+          ].map(({ icon, text }) => (
+            <div key={text} className="flex items-center gap-3 text-slate-300 text-sm">
+              <span className="text-base leading-none">{icon}</span>
+              <span>{text}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Right panel — form */}
+      {/* Right panel */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md animate-slide-up">
-          {/* Logo for mobile */}
-          <div className="flex lg:hidden items-center gap-2 mb-8">
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-sm">CF</span>
-            </div>
-            <span className="text-slate-800 font-bold text-lg">Classfun</span>
+          {/* Mobile logo */}
+          <div className="flex lg:hidden justify-center mb-10">
+            <ClassfunLogo variant="full" size="lg" animated />
           </div>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-800">Welcome back</h1>
+            <h1 className="text-2xl font-bold text-slate-800">Welcome back 👋</h1>
             <p className="text-slate-500 text-sm mt-1">Sign in to your business dashboard</p>
           </div>
 
@@ -130,7 +123,10 @@ export default function LoginPage() {
               </div>
 
               <div className="flex justify-end">
-                <Link to="/forgot-password" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                >
                   Forgot password?
                 </Link>
               </div>
@@ -148,13 +144,12 @@ export default function LoginPage() {
 
           <p className="mt-6 text-center text-sm text-slate-500">
             Don't have an account?{' '}
-            <Link to="/register" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
-              Start your free trial
+            <Link
+              to="/register"
+              className="text-[#E87600] hover:text-[#C46200] font-semibold transition-colors"
+            >
+              Start your free trial →
             </Link>
-          </p>
-
-          <p className="mt-3 text-center text-xs text-slate-400 flex items-center justify-center gap-1">
-            <Sparkles size={11} /> 30-day free trial · No credit card required
           </p>
         </div>
       </div>

@@ -19,6 +19,7 @@ import {
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../hooks/use-auth';
 import { useCenters } from '../../hooks/queries/use-centers';
+import { ClassfunLogo } from '../ui/classfun-logo';
 
 const mainNav = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -109,18 +110,13 @@ export function Sidebar() {
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-white border-r border-slate-100 flex flex-col shadow-sm">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
-        <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-          <span className="text-white font-bold text-sm tracking-tight">CF</span>
-        </div>
-        <div className="flex flex-col leading-tight">
-          <span className="text-[17px] font-bold text-slate-800 tracking-tight">Classfun</span>
-          {isManager && managerCenter && (
-            <span className="flex items-center gap-1 text-[11px] text-indigo-500 font-medium">
-              <MapPin size={9} />
-              {managerCenter.name}
-            </span>
-          )}
-        </div>
+        <ClassfunLogo variant="full" size="sm" animated />
+        {isManager && managerCenter && (
+          <span className="flex items-center gap-1 text-[11px] text-indigo-500 font-medium ml-auto">
+            <MapPin size={9} />
+            {managerCenter.name}
+          </span>
+        )}
       </div>
 
       {/* Nav */}
@@ -179,22 +175,6 @@ export function Sidebar() {
           </div>
         </div>
       </nav>
-
-      {/* Bottom promo */}
-      <div className="px-4 pb-5">
-        <div className="bg-indigo-600 rounded-2xl p-4 text-white">
-          <div className="flex items-center gap-2 mb-1.5">
-            <Sparkles size={14} className="text-indigo-200" />
-            <span className="text-[13px] font-semibold">Pro Features</span>
-          </div>
-          <p className="text-[11px] text-indigo-200 leading-relaxed mb-3">
-            Unlock advanced reports, bulk SMS, and API access.
-          </p>
-          <button className="w-full bg-white text-indigo-600 text-xs font-semibold py-1.5 rounded-lg hover:bg-indigo-50 transition-colors">
-            Upgrade to Pro
-          </button>
-        </div>
-      </div>
     </aside>
   );
 }

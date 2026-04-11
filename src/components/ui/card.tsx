@@ -1,21 +1,26 @@
 import { cn } from '../../lib/utils';
 import type { ReactNode } from 'react';
+import type React from 'react';
 
 interface CardProps {
   children: ReactNode;
   className?: string;
   hover?: boolean;
   animate?: boolean;
+  style?: React.CSSProperties;
 }
 
-export function Card({ children, className, hover, animate }: CardProps) {
+export function Card({ children, className, hover, animate, style }: CardProps) {
   return (
-    <div className={cn(
-      'bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)]',
-      hover && 'card-hover',
-      animate && 'animate-slide-up',
-      className,
-    )}>
+    <div
+      style={style}
+      className={cn(
+        'bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)]',
+        hover && 'card-hover',
+        animate && 'animate-slide-up opacity-0 [animation-fill-mode:forwards]',
+        className,
+      )}
+    >
       {children}
     </div>
   );
