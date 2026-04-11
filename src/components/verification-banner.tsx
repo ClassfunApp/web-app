@@ -46,12 +46,14 @@ export function VerificationBanner() {
   const { icon, bg, text, message } = getBannerConfig(kycStatus);
 
   return (
-    <div className={`flex items-center gap-3 rounded-lg border px-4 py-3 ${bg}`}>
-      {icon}
-      <p className={`text-sm flex-1 ${text}`}>{message}</p>
+    <div className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 rounded-lg border px-3 sm:px-4 py-3 ${bg}`}>
+      <div className="flex items-start gap-2 sm:gap-3">
+        {icon}
+        <p className={`text-xs sm:text-sm flex-1 ${text}`}>{message}</p>
+      </div>
       <Link
         to="/verification"
-        className={`flex items-center gap-1 text-sm font-medium whitespace-nowrap ${text} hover:underline`}
+        className={`flex items-center justify-center gap-1 text-xs sm:text-sm font-medium whitespace-nowrap ${text} hover:underline bg-white/50 sm:bg-transparent rounded-md px-3 py-1.5 sm:px-0 sm:py-0`}
       >
         Complete verification <ArrowRight size={14} />
       </Link>
