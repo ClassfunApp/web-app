@@ -25,8 +25,8 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div className={cn(
-      'bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] p-4 sm:p-5',
-      'animate-slide-up card-hover',
+      'bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] p-3 sm:p-5',
+      'animate-slide-up card-hover min-w-0',
       className,
     )}>
       <div className="flex items-center sm:items-start gap-3 sm:gap-4">
@@ -45,7 +45,7 @@ export function StatCard({
             <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">{title}</p>
             <Info size={12} className="text-slate-300 shrink-0 hidden sm:block" />
           </div>
-          <p className="mt-0.5 sm:mt-1 text-xl sm:text-[28px] font-bold text-slate-800 leading-none tracking-tight animate-count-up">
+          <p className="mt-0.5 sm:mt-1 text-lg sm:text-[28px] font-bold text-slate-800 leading-none tracking-tight animate-count-up truncate">
             {value}
           </p>
 
@@ -77,13 +77,13 @@ export function StatCard({
 /* ─── Skeleton version ─────────────────────────────────────── */
 export function StatCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] p-4 sm:p-5">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] p-3 sm:p-5 min-w-0">
       <div className="flex items-center sm:items-start gap-3 sm:gap-4">
         <div className="skeleton w-10 h-10 sm:w-11 sm:h-11 rounded-full shrink-0" />
-        <div className="flex-1 space-y-2 sm:space-y-2.5 pt-0.5">
-          <div className="skeleton h-3 sm:h-3.5 w-20 sm:w-24 rounded" />
+        <div className="flex-1 space-y-2 sm:space-y-2.5 pt-0.5 min-w-0">
+          <div className="skeleton h-3 sm:h-3.5 w-16 sm:w-24 rounded" />
           <div className="skeleton h-5 sm:h-7 w-12 sm:w-16 rounded" />
-          <div className="skeleton h-2.5 sm:h-3 w-20 sm:w-28 rounded" />
+          <div className="skeleton h-2.5 sm:h-3 w-16 sm:w-28 rounded" />
         </div>
       </div>
     </div>

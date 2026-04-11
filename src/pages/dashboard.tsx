@@ -53,7 +53,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 stagger-children">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 stagger-children">
         {isLoading ? (
           <>
             <StatCardSkeleton />
