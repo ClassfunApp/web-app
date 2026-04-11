@@ -25,7 +25,7 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div className={cn(
-      'bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] p-3 sm:p-5',
+      'bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)] p-3 sm:p-5',
       'animate-slide-up card-hover min-w-0',
       className,
     )}>
@@ -42,10 +42,10 @@ export function StatCard({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">{title}</p>
-            <Info size={12} className="text-slate-300 shrink-0 hidden sm:block" />
+            <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 truncate">{title}</p>
+            <Info size={12} className="text-slate-300 dark:text-slate-600 shrink-0 hidden sm:block" />
           </div>
-          <p className="mt-0.5 sm:mt-1 text-lg sm:text-[28px] font-bold text-slate-800 leading-none tracking-tight animate-count-up truncate">
+          <p className="mt-0.5 sm:mt-1 text-lg sm:text-[28px] font-bold text-slate-800 dark:text-slate-100 leading-none tracking-tight animate-count-up truncate">
             {value}
           </p>
 
@@ -56,16 +56,16 @@ export function StatCard({
                 <span className={cn(
                   'flex items-center gap-0.5 text-xs font-semibold rounded-full px-1.5 py-0.5',
                   'transition-colors duration-200',
-                  trend >= 0 ? 'text-emerald-700 bg-emerald-50' : 'text-red-600 bg-red-50',
+                  trend >= 0 ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950' : 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950',
                 )}>
                   <TrendingUp size={10} className={cn('transition-transform', trend < 0 ? 'rotate-180' : '')} />
                   {trend >= 0 ? '+' : ''}{trend}%
                 </span>
-                <span className="text-xs text-slate-400 hidden sm:inline">from last month</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 hidden sm:inline">from last month</span>
               </>
             )}
             {subtitle && trend === undefined && (
-              <p className="text-xs text-slate-400">{subtitle}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500">{subtitle}</p>
             )}
           </div>
         </div>
@@ -77,7 +77,7 @@ export function StatCard({
 /* ─── Skeleton version ─────────────────────────────────────── */
 export function StatCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] p-3 sm:p-5 min-w-0">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)] p-3 sm:p-5 min-w-0">
       <div className="flex items-center sm:items-start gap-3 sm:gap-4">
         <div className="skeleton w-10 h-10 sm:w-11 sm:h-11 rounded-full shrink-0" />
         <div className="flex-1 space-y-2 sm:space-y-2.5 pt-0.5 min-w-0">

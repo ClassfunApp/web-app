@@ -1,105 +1,181 @@
 @import "tailwindcss";
 
+/* ─── Dark Mode Variant ─────────────────────────────────────── */
+@custom-variant dark (&:is(.dark *));
+
 /* ─── Classfun Brand Colors ──────────────────────────────────
    Override Tailwind's indigo palette with Class Purple.
    All existing `indigo-*` utilities now render brand purple.
    ─────────────────────────────────────────────────────────── */
 @theme {
   /* Class Purple (replaces indigo) */
-  --color-indigo-50:  #F0EDFF;
-  --color-indigo-100: #E0D8FF;
-  --color-indigo-200: #C5B5FF;
-  --color-indigo-300: #A48EF5;
-  --color-indigo-400: #8B71ED;
-  --color-indigo-500: #7055DC;
-  --color-indigo-600: #5B45D0;  /* primary brand purple */
-  --color-indigo-700: #4A38B8;
-  --color-indigo-800: #3A2C90;
-  --color-indigo-900: #2A1F68;
-  --color-indigo-950: #1A1240;
+  --color-indigo-50: #f0edff;
+  --color-indigo-100: #e0d8ff;
+  --color-indigo-200: #c5b5ff;
+  --color-indigo-300: #a48ef5;
+  --color-indigo-400: #8b71ed;
+  --color-indigo-500: #7055dc;
+  --color-indigo-600: #5b45d0; /* primary brand purple */
+  --color-indigo-700: #4a38b8;
+  --color-indigo-800: #3a2c90;
+  --color-indigo-900: #2a1f68;
+  --color-indigo-950: #1a1240;
 
   /* Fun Orange */
-  --color-cf-orange:      #E87600;
-  --color-cf-orange-dark: #C46200;
-  --color-cf-orange-50:   #FFF5E6;
-  --color-cf-orange-100:  #FFE4B8;
+  --color-cf-orange: #e87600;
+  --color-cf-orange-dark: #c46200;
+  --color-cf-orange-50: #fff5e6;
+  --color-cf-orange-100: #ffe4b8;
 
   /* Deep Navy (dark backgrounds, left panels) */
-  --color-cf-navy:       #1B2B4A;
+  --color-cf-navy: #1b2b4a;
   --color-cf-navy-light: #243559;
 
   /* Yellow Gold */
-  --color-cf-gold: #F5B400;
+  --color-cf-gold: #f5b400;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 /* ─── Keyframes ─────────────────────────────────────────────── */
 @keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-down {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slide-in-left {
-  from { opacity: 0; transform: translateX(-20px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes shimmer {
-  from { background-position: -200% center; }
-  to   { background-position: 200% center; }
+  from {
+    background-position: -200% center;
+  }
+  to {
+    background-position: 200% center;
+  }
 }
 
 @keyframes count-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes draw-swoosh {
-  from { stroke-dashoffset: 120; }
-  to   { stroke-dashoffset: 0; }
+  from {
+    stroke-dashoffset: 120;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /* ─── Animation utilities ────────────────────────────────────── */
-.animate-fade-in        { animation: fade-in 0.3s ease forwards; }
-.animate-slide-up       { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-slide-down     { animation: slide-down 0.25s ease forwards; }
-.animate-slide-in-left  { animation: slide-in-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-scale-in       { animation: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-count-up       { animation: count-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-draw-swoosh    {
+.animate-fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+.animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-slide-down {
+  animation: slide-down 0.25s ease forwards;
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-scale-in {
+  animation: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-count-up {
+  animation: count-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-draw-swoosh {
   stroke-dasharray: 120;
   animation: draw-swoosh 0.7s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Staggered children */
-.stagger-children > *:nth-child(1) { animation-delay:   0ms; }
-.stagger-children > *:nth-child(2) { animation-delay:  60ms; }
-.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
-.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
-.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
-.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
-.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
-.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+.stagger-children > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger-children > *:nth-child(2) {
+  animation-delay: 60ms;
+}
+.stagger-children > *:nth-child(3) {
+  animation-delay: 120ms;
+}
+.stagger-children > *:nth-child(4) {
+  animation-delay: 180ms;
+}
+.stagger-children > *:nth-child(5) {
+  animation-delay: 240ms;
+}
+.stagger-children > *:nth-child(6) {
+  animation-delay: 300ms;
+}
+.stagger-children > *:nth-child(7) {
+  animation-delay: 360ms;
+}
+.stagger-children > *:nth-child(8) {
+  animation-delay: 420ms;
+}
 
 /* ─── Skeleton shimmer ───────────────────────────────────────── */
 .skeleton {
@@ -109,11 +185,26 @@ body {
   border-radius: 10px;
 }
 
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+
 /* ─── Scrollbar polish ───────────────────────────────────────── */
-::-webkit-scrollbar        { width: 5px; height: 5px; }
-::-webkit-scrollbar-track  { background: transparent; }
-::-webkit-scrollbar-thumb  { background: #cbd5e1; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
 /* ─── Page-level entry ───────────────────────────────────────── */
 .page-enter {
@@ -122,11 +213,17 @@ body {
 
 /* ─── Card hover lift ────────────────────────────────────────── */
 .card-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(0,0,0,0.10);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Classfun logo swoosh ───────────────────────────────────── */

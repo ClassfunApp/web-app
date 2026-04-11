@@ -32,23 +32,23 @@ export function formatDateTime(date: string | Date | null): string {
 
 export function statusColor(status: string): string {
   const colors: Record<string, string> = {
-    active: 'bg-green-100 text-green-800',
-    trial: 'bg-blue-100 text-blue-800',
-    suspended: 'bg-red-100 text-red-800',
-    inactive: 'bg-gray-100 text-gray-800',
-    archived: 'bg-gray-100 text-gray-800',
-    pending: 'bg-yellow-100 text-yellow-800',
-    paid: 'bg-green-100 text-green-800',
-    overdue: 'bg-red-100 text-red-800',
-    completed: 'bg-blue-100 text-blue-800',
-    dropped: 'bg-gray-100 text-gray-800',
-    sent: 'bg-blue-100 text-blue-800',
-    delivered: 'bg-green-100 text-green-800',
-    failed: 'bg-red-100 text-red-800',
+    active: 'bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-400',
+    trial: 'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-400',
+    suspended: 'bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-400',
+    inactive: 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-400',
+    archived: 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-400',
+    pending: 'bg-yellow-100 dark:bg-yellow-950 text-yellow-800 dark:text-yellow-400',
+    paid: 'bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-400',
+    overdue: 'bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-400',
+    completed: 'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-400',
+    dropped: 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-400',
+    sent: 'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-400',
+    delivered: 'bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-400',
+    failed: 'bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-400',
     // verification statuses
-    submitted: 'bg-blue-100 text-blue-800',
-    approved: 'bg-green-100 text-green-800',
-    rejected: 'bg-red-100 text-red-800',
+    submitted: 'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-400',
+    approved: 'bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-400',
+    rejected: 'bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-400',
   };
-  return colors[status] || 'bg-gray-100 text-gray-800';
+  return colors[status] || 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-slate-400';
 }

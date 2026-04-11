@@ -6,7 +6,7 @@ export function DashboardLayout() {
   const { pathname } = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#f0f3f9] overflow-x-hidden">
+    <div className="min-h-screen bg-[#f0f3f9] dark:bg-slate-950 overflow-x-hidden">
       <Sidebar />
       <div className="flex flex-col min-h-screen lg:ml-64 pt-16 lg:pt-0">
         <Header />

@@ -32,20 +32,20 @@ export default function DashboardPage() {
       {/* Page heading */}
       <div className="flex items-center justify-between animate-slide-down">
         <div>
-          <h1 className="text-lg sm:text-2xl font-bold text-slate-800">
+          <h1 className="text-lg sm:text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
             {greeting()}, {user?.fullName?.split(' ')[0]} 👋
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Here's what's happening at{' '}
-            <span className="font-medium text-slate-700">{dashboard?.tenant.name ?? '…'}</span>
+            <span className="font-medium text-slate-700 dark:text-slate-300">{dashboard?.tenant.name ?? '…'}</span>
           </p>
         </div>
 
         {/* Subscription pill */}
         {dashboard && (
-          <div className="hidden sm:flex items-center gap-2 bg-white border border-slate-200 rounded-full px-3.5 py-1.5 shadow-sm">
+          <div className="hidden sm:flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full px-3.5 py-1.5 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-semibold text-slate-600 capitalize">
+            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 capitalize">
               {dashboard.tenant.subscriptionStatus} plan
             </span>
           </div>
@@ -107,12 +107,12 @@ export default function DashboardPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-bold text-slate-800">Outstanding Fees</h2>
-                <p className="text-xs text-slate-400 mt-0.5">Pending & overdue payments</p>
+                <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">Outstanding Fees</h2>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Pending & overdue payments</p>
               </div>
               <Link
                 to="/payments"
-                className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+                className="flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
               >
                 View all <ArrowRight size={12} />
               </Link>
@@ -130,14 +130,14 @@ export default function DashboardPage() {
               </div>
             ) : !payments?.length ? (
               <div className="py-10 text-center">
-                <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <TrendingUp size={18} className="text-emerald-500" />
+                <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-950 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <TrendingUp size={18} className="text-emerald-500 dark:text-emerald-400" />
                 </div>
-                <p className="text-sm font-medium text-slate-700">All caught up!</p>
-                <p className="text-xs text-slate-400 mt-0.5">No outstanding fees</p>
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">All caught up!</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">No outstanding fees</p>
               </div>
             ) : (
-              <div className="divide-y divide-slate-50">
+              <div className="divide-y divide-slate-50 dark:divide-slate-800">
                 {payments.slice(0, 6).map((p, i) => (
                   <div
                     key={p.id}
@@ -145,16 +145,16 @@ export default function DashboardPage() {
                     style={{ animationDelay: `${i * 40}ms` }}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">
+                      <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-500 dark:text-slate-400">
                         {(p.child?.fullName ?? '?').charAt(0)}
                       </div>
                       <div>
-                        <p className="text-[13px] font-semibold text-slate-700">{p.child?.fullName || 'Unknown'}</p>
-                        <p className="text-[11px] text-slate-400">{formatDate(p.dueDate)}</p>
+                        <p className="text-[13px] font-semibold text-slate-700 dark:text-slate-300">{p.child?.fullName || 'Unknown'}</p>
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500">{formatDate(p.dueDate)}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2.5">
-                      <span className="text-[13px] font-bold text-slate-800">
+                      <span className="text-[13px] font-bold text-slate-800 dark:text-slate-200">
                         {formatCurrency(Number(p.amount), p.currency)}
                       </span>
                       <Badge status={p.status} />
@@ -170,22 +170,22 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 flex flex-col gap-4">
           <Card animate style={{ animationDelay: '150ms' } as React.CSSProperties}>
             <CardHeader>
-              <h2 className="text-sm font-bold text-slate-800">Account Status</h2>
+              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">Account Status</h2>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500">Subscription</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Subscription</span>
                 <Badge status={dashboard?.tenant.subscriptionStatus || 'trial'} />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500">Region</span>
-                <span className="text-xs font-semibold text-slate-700">
+                <span className="text-xs text-slate-500 dark:text-slate-400">Region</span>
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                   {dashboard?.tenant.billingRegion === 'nigeria' ? '🇳🇬 Nigeria' : '🌍 Overseas'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500">Centers</span>
-                <span className="text-xs font-semibold text-slate-700">{stats?.totalCenters ?? '—'}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Centers</span>
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{stats?.totalCenters ?? '—'}</span>
               </div>
             </CardContent>
           </Card>
@@ -193,7 +193,7 @@ export default function DashboardPage() {
           {/* Quick actions */}
           <Card animate style={{ animationDelay: '200ms' } as React.CSSProperties}>
             <CardHeader>
-              <h2 className="text-sm font-bold text-slate-800">Quick Actions</h2>
+              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">Quick Actions</h2>
             </CardHeader>
             <CardContent className="space-y-1 py-3">
               {[
@@ -205,14 +205,14 @@ export default function DashboardPage() {
                 <Link
                   key={to}
                   to={to}
-                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors group animate-fade-in opacity-0 [animation-fill-mode:forwards]"
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group animate-fade-in opacity-0 [animation-fill-mode:forwards]"
                   style={{ animationDelay: `${200 + i * 40}ms` }}
                 >
                   <span className="text-base leading-none">{emoji}</span>
-                  <span className="text-[13px] font-medium text-slate-700 group-hover:text-indigo-600 transition-colors">
+                  <span className="text-[13px] font-medium text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     {label}
                   </span>
-                  <ArrowRight size={12} className="ml-auto text-slate-300 group-hover:text-indigo-400 transition-colors" />
+                  <ArrowRight size={12} className="ml-auto text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 dark:group-hover:text-indigo-400 transition-colors" />
                 </Link>
               ))}
             </CardContent>

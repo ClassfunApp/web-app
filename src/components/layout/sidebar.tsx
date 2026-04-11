@@ -71,8 +71,8 @@ function NavItem({
           "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all relative",
           "animate-slide-in-left opacity-0 [animation-fill-mode:forwards]",
           isActive
-            ? "text-indigo-600 bg-indigo-50/80"
-            : "text-slate-500 hover:text-slate-800 hover:bg-slate-50",
+            ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50"
+            : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800",
         )
       }
     >
@@ -86,8 +86,8 @@ function NavItem({
             className={cn(
               "shrink-0 transition-colors",
               isActive
-                ? "text-indigo-600"
-                : "text-slate-400 group-hover:text-slate-600",
+                ? "text-indigo-600 dark:text-indigo-400"
+                : "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300",
             )}
           />
           <span className="flex-1">{label}</span>
@@ -121,11 +121,11 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between px-4">
         <ClassfunLogo variant="full" size="sm" animated />
         <button
           onClick={toggleMobileMenu}
-          className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -142,7 +142,7 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen w-64 bg-white border-r border-slate-100 flex flex-col shadow-sm",
+          "fixed left-0 top-0 z-50 h-screen w-64 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col shadow-sm",
           "transition-transform duration-300 ease-in-out",
           "lg:translate-x-0",
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full",
@@ -152,14 +152,14 @@ export function Sidebar() {
         <div className="lg:hidden absolute top-4 right-4">
           <button
             onClick={closeMobileMenu}
-            className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400"
             aria-label="Close menu"
           >
             <X size={20} />
           </button>
         </div>
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100">
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 dark:border-slate-800">
         <ClassfunLogo variant="full" size="sm" animated />
         {isManager && managerCenter && (
           <span className="flex items-center gap-1 text-[11px] text-indigo-500 font-medium ml-auto">
@@ -174,10 +174,10 @@ export function Sidebar() {
         {/* Main Menu */}
         <div>
           <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+            <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
               Main Menu
             </span>
-            <ChevronDown size={12} className="text-slate-300" />
+            <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
           </div>
           <div className="space-y-0.5 stagger-children">
             {mainNav.map((item) => (
@@ -196,10 +196,10 @@ export function Sidebar() {
         {/* Management */}
         <div>
           <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+            <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
               Management
             </span>
-            <ChevronDown size={12} className="text-slate-300" />
+            <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
           </div>
           <div className="space-y-0.5 stagger-children">
             {managementNav
@@ -221,8 +221,8 @@ export function Sidebar() {
               className={cn(
                 "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all relative",
                 isVerificationActive
-                  ? "text-indigo-600 bg-indigo-50/80"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-50",
+                  ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800",
               )}
             >
               {isVerificationActive && (
@@ -233,11 +233,11 @@ export function Sidebar() {
                 className={cn(
                   "shrink-0",
                   isVerificationActive
-                    ? "text-indigo-600"
-                    : "text-slate-400 group-hover:text-slate-600",
+                    ? "text-indigo-600 dark:text-indigo-400"
+                    : "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300",
                 )}
               />
-              <span className="flex-1">Verification</span>
+              <span className="flex-1 dark:text-slate-200">Verification</span>
               {!isVerified && (
                 <span
                   className={cn(
