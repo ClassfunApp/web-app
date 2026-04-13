@@ -39,6 +39,7 @@ export interface User {
   email: string;
   phone: string | null;
   role: UserRole;
+  roles?: UserRole[];
   isActive: boolean;
   lastLoginAt: string | null;
   emailVerifiedAt: string | null;

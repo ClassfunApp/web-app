@@ -53,7 +53,7 @@ export default function VerificationPage() {
   const [activeTab, setActiveTab] = useState<Tab>('personal');
   const [successMsg, setSuccessMsg] = useState('');
 
-  const isBusinessOwner = user?.role === 'business_owner';
+  const isBusinessOwner = user?.roles?.includes('business_owner') ?? false;
 
   const userStatus: VerificationStatus = userVerification?.status ?? user?.kycStatus ?? 'pending';
   const tenantStatus: VerificationStatus = tenantVerification?.status ?? 'pending';

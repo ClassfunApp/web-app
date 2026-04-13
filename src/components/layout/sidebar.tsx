@@ -104,8 +104,8 @@ export function Sidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const kycStatus = user?.kycStatus || "pending";
   const isVerified = kycStatus === "approved";
-  const isManager = user?.role === "manager";
-  const isOwner = user?.role === "business_owner";
+  const isManager = user?.roles?.includes("manager") || false;
+  const isOwner = user?.roles?.includes("business_owner") || false;
 
   const { data: centers = [] } = useCenters();
   const managerCenter =
