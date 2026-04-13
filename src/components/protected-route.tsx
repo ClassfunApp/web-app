@@ -16,7 +16,7 @@ export function ProtectedRoute({ children, requireContactVerified = true }: Prot
   if (!isAuthenticated) return <Navigate to="/login" replace state={{ from: location }} />;
 
   // Parents have their own portal — block them from the business dashboard
-  if (user?.roles.length == 1 && user?.roles?.includes('parent')) return <Navigate to="/login" replace />;
+  if (user?.roles?.length === 1 && user?.roles?.includes('parent')) return <Navigate to="/login" replace />;
 
   // If contact (email/phone) not yet verified, redirect to the verify page
   if (requireContactVerified && !isContactVerified) {

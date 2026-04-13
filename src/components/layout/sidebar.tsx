@@ -109,8 +109,8 @@ export function Sidebar() {
 
   const { data: centers = [] } = useCenters();
   const managerCenter =
-    isManager && user.centerId
-      ? centers.find((c) => c.id === user.centerId)
+    isManager && user?.centerId
+      ? centers.find((c) => c.id === user?.centerId)
       : null;
 
   const isVerificationActive = location.pathname === "/verification";
