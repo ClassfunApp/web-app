@@ -28,7 +28,7 @@ export default function AttendancePage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Attendance</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Attendance</h1>
 
       <div className="flex gap-4">
         <div className="w-64">

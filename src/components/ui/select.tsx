@@ -12,15 +12,15 @@ export function Select({ label, error, options, className, id, ...props }: Selec
   return (
     <div className="space-y-1.5">
       {label && (
-        <label htmlFor={selectId} className="block text-[13px] font-semibold text-slate-700">
+        <label htmlFor={selectId} className="block text-[13px] font-semibold text-slate-700 dark:text-slate-300">
           {label}
         </label>
       )}
       <select
         id={selectId}
         className={cn(
-          'block w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-800',
-          'focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none',
+          'block w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-200',
+          'focus:bg-white dark:focus:bg-slate-700 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none',
           'transition-all appearance-none',
           error && 'border-red-400',
           className,

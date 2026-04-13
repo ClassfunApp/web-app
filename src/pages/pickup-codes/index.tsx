@@ -18,7 +18,7 @@ export default function PickupCodesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Pickup Code Validation</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Pickup Code Validation</h1>
 
       <Card>
         <div className="p-6">
@@ -52,9 +52,9 @@ export default function PickupCodesPage() {
                   <img src={validate.data.child.photoUrl} alt="" className="w-16 h-16 rounded-full object-cover" />
                 )}
                 <div>
-                  <p className="text-lg font-medium text-gray-900">{validate.data.child.fullName}</p>
-                  <p className="text-sm text-gray-500">Child ID: {validate.data.child.id}</p>
-                  <p className="text-sm text-gray-500">Used at: {new Date(validate.data.usedAt).toLocaleString()}</p>
+                  <p className="text-lg font-medium text-slate-900 dark:text-slate-100">{validate.data.child.fullName}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Child ID: {validate.data.child.id}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">Used at: {new Date(validate.data.usedAt).toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default function PickupCodesPage() {
               <XCircle className="text-red-500" size={24} />
               <div>
                 <h2 className="text-lg font-semibold text-red-700">Invalid Code</h2>
-                <p className="text-sm text-gray-500">The code is invalid, expired, or has already been used.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">The code is invalid, expired, or has already been used.</p>
               </div>
             </div>
           </div>

@@ -24,14 +24,14 @@ export default function EnrollmentsPage() {
     { key: 'enrolledAt', header: 'Enrolled', render: (e: Enrollment) => formatDate(e.enrolledAt) },
     { key: 'status', header: 'Status', render: (e: Enrollment) => <Badge status={e.status} /> },
     { key: 'actions', header: '', render: (e: Enrollment) => (
-      <button className="text-gray-400 hover:text-red-600" onClick={() => { if (confirm('Remove enrollment?')) deleteEnrollment.mutate(e.id); }}><Trash2 size={16} /></button>
+      <button className="text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400" onClick={() => { if (confirm('Remove enrollment?')) deleteEnrollment.mutate(e.id); }}><Trash2 size={16} /></button>
     )},
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Enrollments</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Enrollments</h1>
         <Button onClick={() => setFormOpen(true)}><Plus size={16} className="mr-2" /> Enroll Child</Button>
       </div>
       <Card>

@@ -15,8 +15,8 @@ export function Card({ children, className, hover, animate, style }: CardProps) 
     <div
       style={style}
       className={cn(
-        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)]',
-        hover && 'card-hover',
+        'bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)]',
+        hover && 'hover:shadow-md dark:hover:shadow-[0_4px_12px_0_rgba(0,0,0,0.30)] transition-shadow',
         animate && 'animate-slide-up opacity-0 [animation-fill-mode:forwards]',
         className,
       )}
@@ -28,7 +28,7 @@ export function Card({ children, className, hover, animate, style }: CardProps) 
 
 export function CardHeader({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('px-6 py-4 border-b border-slate-100 dark:border-slate-800', className)}>
+    <div className={cn('px-6 py-4 border-b border-slate-100 dark:border-slate-700', className)}>
       {children}
     </div>
   );
@@ -41,7 +41,7 @@ export function CardContent({ children, className }: { children: ReactNode; clas
 /* ─── Skeleton card ─────────────────────────────────────────── */
 export function CardSkeleton({ lines = 3 }: { lines?: number }) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)] p-6 space-y-3">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-[0_2px_8px_0_rgba(0,0,0,0.20)] p-6 space-y-3">
       <div className="skeleton h-4 w-32 rounded" />
       {Array.from({ length: lines }).map((_, i) => (
         <div key={i} className={cn('skeleton h-3 rounded', i % 2 === 0 ? 'w-full' : 'w-4/5')} />

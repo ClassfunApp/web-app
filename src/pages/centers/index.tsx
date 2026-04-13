@@ -22,7 +22,7 @@ export default function CentersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Centers</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Centers</h1>
         <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
           <Plus size={16} className="mr-2" /> Add Center
         </Button>
@@ -34,13 +34,13 @@ export default function CentersPage() {
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{center.name}</h3>
-                  {center.address && <p className="text-sm text-gray-500 mt-1">{center.address}</p>}
-                  {center.phone && <p className="text-sm text-gray-500">{center.phone}</p>}
+                  <h3 className="font-semibold text-slate-900 dark:text-slate-100">{center.name}</h3>
+                  {center.address && <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{center.address}</p>}
+                  {center.phone && <p className="text-sm text-slate-500 dark:text-slate-400">{center.phone}</p>}
                 </div>
                 <Badge status={center.status} />
               </div>
-              <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
                 <Button size="sm" variant="secondary" onClick={() => { setEditing(center); setFormOpen(true); }}>
                   <Pencil size={14} className="mr-1" /> Edit
                 </Button>
@@ -69,8 +69,8 @@ export default function CentersPage() {
       </div>
 
       {!centers?.length && (
-        <div className="text-center py-12 text-gray-500">
-          <Building2 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+        <div className="text-center py-12 text-slate-500 dark:text-slate-400">
+          <Building2 className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
           <p>No centers yet. Add your first center to get started.</p>
         </div>
       )}
@@ -81,7 +81,7 @@ export default function CentersPage() {
         {qrModal && (
           <div className="text-center py-4">
             <img src={qrModal.url} alt="QR Code" className="mx-auto w-64 h-64" />
-            <p className="mt-4 text-sm text-gray-500">Display this QR code at your center entrance for parents to scan.</p>
+            <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Display this QR code at your center entrance for parents to scan.</p>
           </div>
         )}
       </Modal>

@@ -22,8 +22,8 @@ export default function FamiliesPage() {
     { key: 'children', header: 'Children', render: (f: Family) => String(f.children?.length ?? 0) },
     { key: 'actions', header: '', render: (f: Family) => (
       <div className="flex gap-1">
-        <button className="text-gray-400 hover:text-indigo-600" onClick={() => { setEditing(f); setFormOpen(true); }}><Pencil size={16} /></button>
-        <button className="text-gray-400 hover:text-red-600" onClick={() => { if (confirm('Delete?')) deleteFamily.mutate(f.id); }}><Trash2 size={16} /></button>
+        <button className="text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400" onClick={() => { setEditing(f); setFormOpen(true); }}><Pencil size={16} /></button>
+        <button className="text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400" onClick={() => { if (confirm('Delete?')) deleteFamily.mutate(f.id); }}><Trash2 size={16} /></button>
       </div>
     )},
   ];
@@ -31,7 +31,7 @@ export default function FamiliesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Families</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Families</h1>
         <Button onClick={() => { setEditing(null); setFormOpen(true); }}><Plus size={16} className="mr-2" /> Add Family</Button>
       </div>
       <Card>

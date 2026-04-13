@@ -26,18 +26,18 @@ const STATUS_MESSAGE: Record<VerificationStatus, string> = {
 
 function StatusBanner({ status, rejectionReason }: { status: VerificationStatus; rejectionReason?: string | null }) {
   const colors: Record<VerificationStatus, string> = {
-    pending: 'bg-yellow-50 border-yellow-200',
-    submitted: 'bg-blue-50 border-blue-200',
-    approved: 'bg-green-50 border-green-200',
-    rejected: 'bg-red-50 border-red-200',
+    pending: 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950/30 dark:border-yellow-900/50',
+    submitted: 'bg-blue-50 border-blue-200 dark:bg-blue-950/30 dark:border-blue-900/50',
+    approved: 'bg-green-50 border-green-200 dark:bg-green-950/30 dark:border-green-900/50',
+    rejected: 'bg-red-50 border-red-200 dark:bg-red-950/30 dark:border-red-900/50',
   };
   return (
     <div className={`flex items-start gap-3 rounded-lg border p-4 ${colors[status]}`}>
       {STATUS_ICON[status]}
       <div>
-        <p className="text-sm font-medium text-gray-800">{STATUS_MESSAGE[status]}</p>
+        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{STATUS_MESSAGE[status]}</p>
         {status === 'rejected' && rejectionReason && (
-          <p className="text-sm text-red-600 mt-1">Reason: {rejectionReason}</p>
+          <p className="text-sm text-red-600 dark:text-red-400 mt-1">Reason: {rejectionReason}</p>
         )}
       </div>
     </div>
@@ -73,8 +73,8 @@ export default function VerificationPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Account Verification</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Account Verification</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">
           Complete your verification to unlock all features. Both personal and business verification are required.
         </p>
       </div>
@@ -83,9 +83,9 @@ export default function VerificationPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card>
           <CardContent className="flex items-center gap-3 py-4">
-            <User size={20} className="text-gray-400" />
+            <User size={20} className="text-slate-400 dark:text-slate-500" />
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Personal KYC</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Personal KYC</p>
               <div className="flex items-center gap-2 mt-0.5">
                 {STATUS_ICON[userStatus]}
                 <Badge status={userStatus} />
@@ -96,9 +96,9 @@ export default function VerificationPage() {
         {isBusinessOwner && (
           <Card>
             <CardContent className="flex items-center gap-3 py-4">
-              <Building2 size={20} className="text-gray-400" />
+              <Building2 size={20} className="text-slate-400 dark:text-slate-500" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-500 uppercase tracking-wide">Business Verification</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">Business Verification</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   {STATUS_ICON[tenantStatus]}
                   <Badge status={tenantStatus} />
@@ -110,7 +110,7 @@ export default function VerificationPage() {
       </div>
 
       {/* Tab nav */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-slate-200 dark:border-slate-700">
         <nav className="flex gap-1">
           {tabs.map((tab) => (
             <button
@@ -118,8 +118,8 @@ export default function VerificationPage() {
               onClick={() => { setActiveTab(tab.id); setSuccessMsg(''); }}
               className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab.id
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-indigo-600 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
             >
               <tab.icon size={16} />
@@ -143,9 +143,9 @@ export default function VerificationPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-base font-semibold text-gray-900">Personal Identity Verification</h2>
+                <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Personal Identity Verification</h2>
                 {userVerification?.submittedAt && (
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Last submitted: {formatDate(userVerification.submittedAt)}
                   </p>
                 )}
@@ -189,9 +189,9 @@ export default function VerificationPage() {
         <Card>
           <CardHeader>
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Business Verification</h2>
+              <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Business Verification</h2>
               {tenantVerification?.submittedAt && (
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Last submitted: {formatDate(tenantVerification.submittedAt)}
                 </p>
               )}
@@ -244,23 +244,23 @@ function VerificationSummary({
       <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3">
         {items.filter((i) => i.value).map((item) => (
           <div key={item.label}>
-            <dt className="text-xs text-gray-500 uppercase tracking-wide">{item.label}</dt>
-            <dd className="text-sm font-medium text-gray-900 mt-0.5 capitalize">{item.value}</dd>
+            <dt className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wide">{item.label}</dt>
+            <dd className="text-sm font-medium text-slate-900 dark:text-slate-200 mt-0.5 capitalize">{item.value}</dd>
           </div>
         ))}
       </dl>
       <div className="flex flex-wrap gap-4 pt-2">
         {imageUrls.filter((i) => i.url).map((item) => (
           <div key={item.label} className="space-y-1">
-            <p className="text-xs text-gray-500">{item.label}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{item.label}</p>
             {item.url?.match(/\.(jpg|jpeg|png|webp)$/i) ? (
-              <img src={item.url} alt={item.label} className="h-20 w-auto rounded border border-gray-200 object-cover" />
+              <img src={item.url} alt={item.label} className="h-20 w-auto rounded border border-slate-200 dark:border-slate-700 object-cover" />
             ) : (
               <a
                 href={item.url!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-indigo-600 underline"
+                className="text-xs text-indigo-600 dark:text-indigo-400 underline"
               >
                 View document
               </a>

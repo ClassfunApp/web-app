@@ -41,7 +41,7 @@ export default function NotificationsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Notifications</h1>
         <Button onClick={() => setBroadcastOpen(true)}>
           <Send size={16} className="mr-2" /> Send Message
         </Button>

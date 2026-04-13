@@ -28,7 +28,7 @@ export default function ChildrenPage() {
 
   const columns = [
     { key: 'fullName', header: 'Name', render: (c: Child) => (
-      <span className="font-medium cursor-pointer text-indigo-600 hover:text-indigo-800" onClick={() => navigate(`/children/${c.id}`)}>{c.fullName}</span>
+      <span className="font-medium cursor-pointer text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300" onClick={() => navigate(`/children/${c.id}`)}>{c.fullName}</span>
     )},
     { key: 'dob', header: 'Date of Birth', render: (c: Child) => formatDate(c.dob) },
     { key: 'gender', header: 'Gender', render: (c: Child) => c.gender || '—' },
@@ -36,8 +36,8 @@ export default function ChildrenPage() {
     { key: 'status', header: 'Status', render: (c: Child) => <Badge status={c.status} /> },
     { key: 'actions', header: '', render: (c: Child) => (
       <div className="flex gap-1">
-        <button className="text-gray-400 hover:text-indigo-600" onClick={(e) => { e.stopPropagation(); setEditing(c); setFormOpen(true); }}><Pencil size={16} /></button>
-        <button className="text-gray-400 hover:text-red-600" onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) deleteChild.mutate(c.id); }}><Trash2 size={16} /></button>
+        <button className="text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400" onClick={(e) => { e.stopPropagation(); setEditing(c); setFormOpen(true); }}><Pencil size={16} /></button>
+        <button className="text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400" onClick={(e) => { e.stopPropagation(); if (confirm('Delete?')) deleteChild.mutate(c.id); }}><Trash2 size={16} /></button>
       </div>
     )},
   ];
@@ -45,7 +45,7 @@ export default function ChildrenPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Children</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Children</h1>
         <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
           <Plus size={16} className="mr-2" /> Add Child
         </Button>

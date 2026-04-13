@@ -47,7 +47,7 @@ export default function StaffPage() {
       key: 'center',
       header: 'Center',
       render: (u: User) => (
-        <span className="text-sm text-gray-600">{centerName(u.centerId)}</span>
+        <span className="text-sm text-slate-600 dark:text-slate-400">{centerName(u.centerId)}</span>
       ),
     },
     {
@@ -103,7 +103,7 @@ export default function StaffPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Staff Management</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Staff Management</h1>
         <Button
           onClick={() => {
             setEditing(null);
