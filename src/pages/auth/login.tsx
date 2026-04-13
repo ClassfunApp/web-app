@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#f0f3f9]">
+    <div className="min-h-screen flex bg-[#f0f3f9] dark:bg-slate-950">
       {/* Left decorative panel */}
       <div className="hidden lg:flex lg:w-[44%] bg-[#1B2B4A] p-12 flex-col justify-between relative overflow-hidden">
         {/* Background orbs */}
@@ -79,13 +79,13 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-800">Welcome back 👋</h1>
-            <p className="text-slate-500 text-sm mt-1">Sign in to your business dashboard</p>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Welcome back 👋</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Sign in to your business dashboard</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] border border-slate-100 p-8">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-slate-800 p-8">
             {error && (
-              <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm animate-slide-down">
+              <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 text-red-700 dark:text-red-400 text-sm animate-slide-down">
                 <span className="mt-0.5 shrink-0">⚠️</span>
                 <span>{error}</span>
               </div>
@@ -115,7 +115,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 bottom-[10px] text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 bottom-[10px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -142,7 +142,7 @@ export default function LoginPage() {
             </form>
           </div>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
             Don't have an account?{' '}
             <Link
               to="/register"

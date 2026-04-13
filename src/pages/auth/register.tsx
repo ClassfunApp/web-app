@@ -65,7 +65,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#f0f3f9]">
+    <div className="min-h-screen flex bg-[#f0f3f9] dark:bg-slate-950">
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-[44%] bg-[#1B2B4A] p-12 flex-col justify-between relative overflow-hidden">
         <div className="absolute -top-20 -left-20 w-80 h-80 bg-indigo-600 rounded-full opacity-20 blur-3xl pointer-events-none" />
@@ -107,13 +107,13 @@ export default function RegisterPage() {
           </div>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-800">Create your account</h1>
-            <p className="text-slate-500 text-sm mt-1">Get started in under 2 minutes</p>
+            <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Create your account</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Get started in under 2 minutes</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] border border-slate-100 p-8">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-slate-800 p-8">
             {error && (
-              <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm animate-slide-down">
+              <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 text-red-700 dark:text-red-400 text-sm animate-slide-down">
                 <span className="mt-0.5 shrink-0">⚠️</span>
                 <span>{error}</span>
               </div>
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 bottom-[10px] text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3 bottom-[10px] text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -156,14 +156,14 @@ export default function RegisterPage() {
                           className={`h-1 flex-1 rounded-full transition-all duration-300 ${
                             i < passwordStrength
                               ? strengthConfig[passwordStrength - 1].color
-                              : 'bg-slate-100'
+                              : 'bg-slate-100 dark:bg-slate-700'
                           }`}
                         />
                       ))}
                     </div>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500">
                       Strength:{' '}
-                      <span className="font-semibold text-slate-600">
+                      <span className="font-semibold text-slate-600 dark:text-slate-400">
                         {strengthConfig[passwordStrength - 1]?.label ?? 'Weak'}
                       </span>
                     </p>
@@ -193,7 +193,7 @@ export default function RegisterPage() {
             </form>
           </div>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
+          <p className="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
             Already have an account?{' '}
             <Link to="/login" className="text-[#E87600] hover:text-[#C46200] font-semibold transition-colors">
               Sign in

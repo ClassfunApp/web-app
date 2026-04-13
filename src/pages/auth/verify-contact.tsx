@@ -66,15 +66,15 @@ export default function VerifyContactPage() {
   /* ── Success screen ── */
   if (successType) {
     return (
-      <div className="min-h-screen bg-[#f0f3f9] flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] border border-slate-100 p-10 max-w-md w-full text-center animate-scale-in">
+      <div className="min-h-screen bg-[#f0f3f9] dark:bg-slate-950 flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-slate-800 p-10 max-w-md w-full text-center animate-scale-in">
           <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5">
             <CheckCircle className="text-emerald-500" size={32} />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">
             {successType === 'email' ? 'Email' : 'Phone'} verified! 🎉
           </h2>
-          <p className="text-slate-500 text-sm mb-8">
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-8">
             Your {successType} has been verified. Let's complete your account setup.
           </p>
           <Button className="w-full" size="lg" onClick={() => navigate('/verification')}>
@@ -87,18 +87,18 @@ export default function VerifyContactPage() {
 
   /* ── Main screen ── */
   return (
-    <div className="min-h-screen bg-[#f0f3f9] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f0f3f9] dark:bg-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md animate-slide-up">
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <ClassfunLogo variant="full" size="lg" animated />
         </div>
 
-        <div className="bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] border border-slate-100 p-8">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.3)] border border-slate-100 dark:border-slate-800 p-8">
           {/* Header */}
           <div className="text-center mb-7">
-            <h1 className="text-xl font-bold text-slate-800">Verify your contact</h1>
-            <p className="text-slate-500 text-sm mt-1.5">
+            <h1 className="text-xl font-bold text-slate-800 dark:text-slate-100">Verify your contact</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1.5">
               Confirm your email or phone to secure your account.
             </p>
           </div>
@@ -112,13 +112,13 @@ export default function VerifyContactPage() {
                   onClick={() => setSelectedType('email')}
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     selectedType === 'email'
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                      : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
+                      ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400'
+                      : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   <Mail size={22} />
                   <span className="text-sm font-semibold">Email</span>
-                  <span className="text-[11px] text-slate-400 truncate max-w-full px-1">{user?.email}</span>
+                  <span className="text-[11px] text-slate-400 dark:text-slate-500 truncate max-w-full px-1">{user?.email}</span>
                 </button>
               )}
               {hasPhone && (
@@ -127,13 +127,13 @@ export default function VerifyContactPage() {
                   onClick={() => setSelectedType('phone')}
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                     selectedType === 'phone'
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                      : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
+                      ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400'
+                      : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   <Phone size={22} />
                   <span className="text-sm font-semibold">Phone</span>
-                  <span className="text-[11px] text-slate-400">{user?.phone}</span>
+                  <span className="text-[11px] text-slate-400 dark:text-slate-500">{user?.phone}</span>
                 </button>
               )}
             </div>
@@ -141,14 +141,14 @@ export default function VerifyContactPage() {
 
           {/* Sent confirmation banner */}
           {codeSent && (
-            <div className="flex items-center gap-3 bg-indigo-50 rounded-xl p-3.5 mb-6 animate-slide-down">
+            <div className="flex items-center gap-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-xl p-3.5 mb-6 animate-slide-down">
               {selectedType === 'email'
                 ? <Mail size={18} className="text-indigo-600 shrink-0" />
                 : <Phone size={18} className="text-indigo-600 shrink-0" />
               }
               <div>
-                <p className="text-sm font-semibold text-indigo-800">Code sent!</p>
-                <p className="text-xs text-indigo-600">
+                <p className="text-sm font-semibold text-indigo-800 dark:text-indigo-300">Code sent!</p>
+                <p className="text-xs text-indigo-600 dark:text-indigo-400">
                   {selectedType === 'email' ? user?.email : user?.phone}
                 </p>
               </div>
@@ -158,7 +158,7 @@ export default function VerifyContactPage() {
           {/* OTP boxes */}
           {codeSent && (
             <div className="mb-6">
-              <p className="text-[13px] font-medium text-slate-600 mb-3 text-center">Enter the 6-digit code</p>
+              <p className="text-[13px] font-medium text-slate-600 dark:text-slate-400 mb-3 text-center">Enter the 6-digit code</p>
               <div className="flex gap-2 justify-center stagger-children">
                 {otp.map((digit, idx) => (
                   <input
@@ -172,8 +172,8 @@ export default function VerifyContactPage() {
                     onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                     className={`w-11 h-14 text-center text-xl font-bold border-2 rounded-xl focus:outline-none transition-all animate-slide-up opacity-0 [animation-fill-mode:forwards] ${
                       digit
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                        : 'border-slate-200 text-slate-800 focus:border-indigo-500 focus:bg-indigo-50/30'
+                        ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400'
+                        : 'border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:border-indigo-500 focus:bg-indigo-50/30 dark:focus:bg-indigo-950/20'
                     }`}
                   />
                 ))}
@@ -221,7 +221,7 @@ export default function VerifyContactPage() {
                 type="button"
                 onClick={countdown > 0 ? undefined : handleSend}
                 disabled={countdown > 0 || sendOtp.isPending}
-                className="flex items-center justify-center gap-2 w-full text-sm text-slate-400 hover:text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors py-2"
+                className="flex items-center justify-center gap-2 w-full text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors py-2"
               >
                 <RefreshCw size={13} className={sendOtp.isPending ? 'animate-spin' : ''} />
                 {countdown > 0 ? `Resend in ${countdown}s` : 'Resend code'}
@@ -230,7 +230,7 @@ export default function VerifyContactPage() {
               <button
                 type="button"
                 onClick={() => { setCodeSent(false); setOtp(['', '', '', '', '', '']); }}
-                className="w-full text-xs text-slate-400 hover:text-slate-600 transition-colors py-1"
+                className="w-full text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors py-1"
               >
                 ← Change to {selectedType === 'email' ? 'phone' : 'email'}
               </button>
