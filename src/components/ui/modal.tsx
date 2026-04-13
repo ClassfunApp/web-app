@@ -40,13 +40,13 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-[2px] p-4 animate-fade-in"
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
-      <div className={`w-full ${sizeClasses[size]} bg-white rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)] animate-scale-in`}>
+      <div className={`w-full ${sizeClasses[size]} bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5)] animate-scale-in`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h3 className="text-base font-bold text-slate-800">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+          <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">{title}</h3>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors active:scale-95"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors active:scale-95"
           >
             <X size={16} />
           </button>
