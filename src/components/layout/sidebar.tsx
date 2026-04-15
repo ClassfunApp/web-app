@@ -18,6 +18,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  Settings,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -98,6 +99,7 @@ export function Sidebar() {
     { to: "/attendance", icon: CalendarCheck, label: "Attendance" },
     { to: "/payments", icon: CreditCard, label: "Payments" },
     { to: "/wallet", icon: Wallet, label: "Wallet" },
+    { to: "/settings/branding", icon: Settings, label: "Settings" },
   ];
 
   const managementNav = [

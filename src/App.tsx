@@ -26,6 +26,8 @@ import PickupCodesPage from './pages/pickup-codes/index';
 import NotificationsPage from './pages/notifications/index';
 import VerificationPage from './pages/verification/index';
 import WalletPage from './pages/wallet/index';
+import EnrollPage from './pages/enroll/index';
+import BrandingPage from './pages/settings/branding';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +48,7 @@ export default function App() {
             {/* Public routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/enroll/:tenantId" element={<EnrollPage />} />
 
             {/* Requires login but NOT contact verification */}
             <Route
@@ -81,6 +84,7 @@ export default function App() {
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="verification" element={<VerificationPage />} />
               <Route path="wallet" element={<WalletPage />} />
+              <Route path="settings/branding" element={<BrandingPage />} />
             </Route>
 
             {/* Catch-all redirect */}

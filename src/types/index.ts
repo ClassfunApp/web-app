@@ -274,6 +274,13 @@ export interface TenantVerification {
   createdAt: string;
 }
 
+export interface PublicTenantInfo {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+  businessType: BusinessType;
+}
+
 // API response wrapper
 export interface ApiResponse<T> {
   status: 'success' | 'error';
@@ -286,6 +293,7 @@ export interface DashboardStats {
   tenant: {
     id: string;
     name: string;
+    logoUrl: string | null;
     subscriptionStatus: TenantStatus;
     billingRegion: BillingRegion;
     businessType: BusinessType;
