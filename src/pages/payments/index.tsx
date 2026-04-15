@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Link as LinkIcon, CheckCircle } from 'lucide-react';
+import { Plus, Link as LinkIcon, CheckCircle, FileText } from 'lucide-react';
 import { usePayments, useGeneratePaymentLink, useMarkAsPaid } from '../../hooks/queries/use-payments';
 import { Button } from '../../components/ui/button';
 import { Card } from '../../components/ui/card';
@@ -8,6 +8,7 @@ import { Badge } from '../../components/ui/badge';
 import { Select } from '../../components/ui/select';
 import { Loading } from '../../components/ui/loading';
 import { FeeForm } from './fee-form';
+import { InvoiceModal } from './invoice-modal';
 import { formatCurrency, formatDate } from '../../lib/utils';
 import type { FeePayment } from '../../types';
 
@@ -17,6 +18,18 @@ export default function PaymentsPage() {
   const generateLink = useGeneratePaymentLink();
   const markPaid = useMarkAsPaid();
   const [formOpen, setFormOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<FeePayment | null>(null);
+  const [invoiceOpen, setInvoiceOpen] = useState(false);
+
+  function openInvoice(p: FeePayment) {
+    setSelectedPayment(p);
+    setInvoiceOpen(true);
+  }
+
+  function closeInvoice() {
+    setInvoiceOpen(false);
+    setSelectedPayment(null);
+  }
 
   const columns = [
     { key: 'child', header: 'Child', render: (p: FeePayment) => p.child?.fullName || '—' },
@@ -24,41 +37,79 @@ export default function PaymentsPage() {
     { key: 'amount', header: 'Amount', render: (p: FeePayment) => formatCurrency(Number(p.amount), p.currency) },
     { key: 'dueDate', header: 'Due Date', render: (p: FeePayment) => formatDate(p.dueDate) },
     { key: 'status', header: 'Status', render: (p: FeePayment) => <Badge status={p.status} /> },
-    { key: 'actions', header: '', render: (p: FeePayment) => (
-      <div className="flex gap-1">
-        {p.status !== 'paid' && (
-          <>
-            <Button size="sm" variant="ghost" onClick={async () => {
-              const res = await generateLink.mutateAsync({ feePaymentId: p.id });
-              window.open(res.paymentLink, '_blank');
-            }}><LinkIcon size={14} className="mr-1" /> Pay Link</Button>
-            <Button size="sm" variant="ghost" onClick={() => { if (confirm('Mark as paid?')) markPaid.mutate(p.id); }}>
-              <CheckCircle size={14} className="mr-1" /> Paid
-            </Button>
-          </>
-        )}
-      </div>
-    )},
+    {
+      key: 'actions',
+      header: '',
+      render: (p: FeePayment) => (
+        <div className="flex gap-1">
+          <Button size="sm" variant="ghost" onClick={() => openInvoice(p)}>
+            <FileText size={14} className="mr-1" /> Invoice
+          </Button>
+          {p.status !== 'paid' && (
+            <>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={async () => {
+                  const res = await generateLink.mutateAsync({ feePaymentId: p.id });
+                  window.open(res.paymentLink, '_blank');
+                }}
+              >
+                <LinkIcon size={14} className="mr-1" /> Pay Link
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  if (confirm('Mark as paid?')) markPaid.mutate(p.id);
+                }}
+              >
+                <CheckCircle size={14} className="mr-1" /> Paid
+              </Button>
+            </>
+          )}
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Payments & Fees</h1>
-        <Button onClick={() => setFormOpen(true)}><Plus size={16} className="mr-2" /> Create Fee</Button>
+        <Button onClick={() => setFormOpen(true)}>
+          <Plus size={16} className="mr-2" /> Create Invoice
+        </Button>
       </div>
 
       <div className="w-48">
-        <Select label="Filter by Status" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} options={[{ value: 'pending', label: 'Pending' }, { value: 'paid', label: 'Paid' }, { value: 'overdue', label: 'Overdue' }]} />
+        <Select
+          label="Filter by Status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          options={[
+            { value: 'pending', label: 'Pending' },
+            { value: 'paid', label: 'Paid' },
+            { value: 'overdue', label: 'Overdue' },
+          ]}
+        />
       </div>
 
-      {isLoading ? <Loading /> : (
+      {isLoading ? (
+        <Loading />
+      ) : (
         <Card>
-          <Table columns={columns} data={payments as unknown as Record<string, unknown>[] || []} emptyMessage="No payments found" />
+          <Table
+            columns={columns}
+            data={(payments as unknown as Record<string, unknown>[]) || []}
+            emptyMessage="No payments found"
+          />
         </Card>
       )}
 
       <FeeForm open={formOpen} onClose={() => setFormOpen(false)} />
+
+      <InvoiceModal payment={selectedPayment} open={invoiceOpen} onClose={closeInvoice} />
     </div>
   );
 }

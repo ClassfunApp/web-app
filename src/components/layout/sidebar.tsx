@@ -8,6 +8,7 @@ import {
   ClipboardList,
   CalendarCheck,
   CreditCard,
+  Wallet,
   UserCog,
   QrCode,
   Bell,
@@ -20,25 +21,9 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
+import { useBusinessType } from "../../hooks/use-business-type";
 import { useCenters } from "../../hooks/queries/use-centers";
 import { ClassfunLogo } from "../ui/classfun-logo";
-
-const mainNav = [
-  { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/children", icon: Baby, label: "Children" },
-  { to: "/families", icon: UsersRound, label: "Families" },
-  { to: "/activities", icon: Dumbbell, label: "Activities" },
-  { to: "/enrollments", icon: ClipboardList, label: "Enrollments" },
-  { to: "/attendance", icon: CalendarCheck, label: "Attendance" },
-  { to: "/payments", icon: CreditCard, label: "Payments" },
-];
-
-const managementNav = [
-  { to: "/centers", icon: Building2, label: "Centers", ownerOnly: true },
-  { to: "/staff", icon: UserCog, label: "Staff", ownerOnly: true },
-  { to: "/pickup-codes", icon: QrCode, label: "Pickup Codes" },
-  { to: "/notifications", icon: Bell, label: "Notifications" },
-];
 
 const STATUS_DOT: Record<string, string> = {
   pending: "bg-amber-400",
@@ -102,6 +87,26 @@ export function Sidebar() {
   const { user } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isSchool, terms } = useBusinessType();
+
+  const mainNav = [
+    { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/children", icon: Baby, label: isSchool ? "Students" : "Children" },
+    { to: "/families", icon: UsersRound, label: "Families" },
+    { to: "/activities", icon: Dumbbell, label: terms.activities },
+    { to: "/enrollments", icon: ClipboardList, label: "Enrollments" },
+    { to: "/attendance", icon: CalendarCheck, label: "Attendance" },
+    { to: "/payments", icon: CreditCard, label: "Payments" },
+    { to: "/wallet", icon: Wallet, label: "Wallet" },
+  ];
+
+  const managementNav = [
+    { to: "/centers", icon: Building2, label: isSchool ? "Campuses" : "Centers", ownerOnly: true },
+    { to: "/staff", icon: UserCog, label: isSchool ? "Staff & Teachers" : "Staff", ownerOnly: true },
+    { to: "/pickup-codes", icon: QrCode, label: "Pickup Codes" },
+    { to: "/notifications", icon: Bell, label: "Notifications" },
+  ];
+
   const kycStatus = user?.kycStatus || "pending";
   const isVerified = kycStatus === "approved";
   const isManager = user?.roles?.includes("manager") || false;
@@ -158,98 +163,99 @@ export function Sidebar() {
             <X size={20} />
           </button>
         </div>
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 dark:border-slate-800">
-        <ClassfunLogo variant="full" size="sm" animated />
-        {isManager && managerCenter && (
-          <span className="flex items-center gap-1 text-[11px] text-indigo-500 font-medium ml-auto">
-            <MapPin size={9} />
-            {managerCenter.name}
-          </span>
-        )}
-      </div>
 
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
-        {/* Main Menu */}
-        <div>
-          <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-              Main Menu
+        {/* Logo */}
+        <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 dark:border-slate-800">
+          <ClassfunLogo variant="full" size="sm" animated />
+          {isManager && managerCenter && (
+            <span className="flex items-center gap-1 text-[11px] text-indigo-500 font-medium ml-auto">
+              <MapPin size={9} />
+              {managerCenter.name}
             </span>
-            <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
-          </div>
-          <div className="space-y-0.5 stagger-children">
-            {mainNav.map((item) => (
-              <NavItem
-                key={item.to}
-                to={item.to}
-                icon={item.icon}
-                label={item.label}
-                exact={item.to === "/"}
-                onClick={closeMobileMenu}
-              />
-            ))}
-          </div>
+          )}
         </div>
 
-        {/* Management */}
-        <div>
-          <div className="flex items-center justify-between px-3 mb-2">
-            <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-              Management
-            </span>
-            <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
-          </div>
-          <div className="space-y-0.5 stagger-children">
-            {managementNav
-              .filter((item) => !item.ownerOnly || isOwner)
-              .map((item) => (
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+          {/* Main Menu */}
+          <div>
+            <div className="flex items-center justify-between px-3 mb-2">
+              <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                Main Menu
+              </span>
+              <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
+            </div>
+            <div className="space-y-0.5 stagger-children">
+              {mainNav.map((item) => (
                 <NavItem
                   key={item.to}
                   to={item.to}
                   icon={item.icon}
                   label={item.label}
+                  exact={item.to === "/"}
                   onClick={closeMobileMenu}
                 />
               ))}
+            </div>
+          </div>
 
-            {/* Verification with status dot */}
-            <NavLink
-              to="/verification"
-              onClick={closeMobileMenu}
-              className={cn(
-                "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all relative",
-                isVerificationActive
-                  ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50"
-                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800",
-              )}
-            >
-              {isVerificationActive && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-600 rounded-r-full" />
-              )}
-              <ShieldCheck
-                size={18}
+          {/* Management */}
+          <div>
+            <div className="flex items-center justify-between px-3 mb-2">
+              <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                Management
+              </span>
+              <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
+            </div>
+            <div className="space-y-0.5 stagger-children">
+              {managementNav
+                .filter((item) => !item.ownerOnly || isOwner)
+                .map((item) => (
+                  <NavItem
+                    key={item.to}
+                    to={item.to}
+                    icon={item.icon}
+                    label={item.label}
+                    onClick={closeMobileMenu}
+                  />
+                ))}
+
+              {/* Verification with status dot */}
+              <NavLink
+                to="/verification"
+                onClick={closeMobileMenu}
                 className={cn(
-                  "shrink-0",
+                  "group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all relative",
                   isVerificationActive
-                    ? "text-indigo-600 dark:text-indigo-400"
-                    : "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300",
+                    ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800",
                 )}
-              />
-              <span className="flex-1 dark:text-slate-200">Verification</span>
-              {!isVerified && (
-                <span
+              >
+                {isVerificationActive && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-600 rounded-r-full" />
+                )}
+                <ShieldCheck
+                  size={18}
                   className={cn(
-                    "w-2 h-2 rounded-full",
-                    STATUS_DOT[kycStatus] || "bg-amber-400",
+                    "shrink-0",
+                    isVerificationActive
+                      ? "text-indigo-600 dark:text-indigo-400"
+                      : "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300",
                   )}
                 />
-              )}
-            </NavLink>
+                <span className="flex-1 dark:text-slate-200">Verification</span>
+                {!isVerified && (
+                  <span
+                    className={cn(
+                      "w-2 h-2 rounded-full",
+                      STATUS_DOT[kycStatus] || "bg-amber-400",
+                    )}
+                  />
+                )}
+              </NavLink>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
       </aside>
     </>
   );

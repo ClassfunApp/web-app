@@ -1,5 +1,6 @@
 // Enums
 export type UserRole = 'super_admin' | 'business_owner' | 'manager' | 'teacher' | 'staff' | 'parent';
+export type BusinessType = 'activity_center' | 'school';
 export type TenantStatus = 'trial' | 'active' | 'suspended';
 export type BillingRegion = 'nigeria' | 'overseas';
 export type ChildStatus = 'active' | 'suspended' | 'inactive';
@@ -28,6 +29,7 @@ export interface Tenant {
   businessVerificationStatus: VerificationStatus;
   businessVerifiedAt: string | null;
   businessRejectionReason: string | null;
+  businessType: BusinessType;
   createdAt: string;
 }
 
@@ -156,6 +158,15 @@ export interface Attendance {
   createdAt: string;
 }
 
+export interface InvoiceLineItem {
+  id: string;
+  feePaymentId: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  createdAt: string;
+}
+
 export interface FeePayment {
   id: string;
   childId: string;
@@ -170,6 +181,31 @@ export interface FeePayment {
   receiptUrl: string | null;
   gatewayReference: string | null;
   child?: Child;
+  lineItems?: InvoiceLineItem[];
+  createdAt: string;
+}
+
+export type TransactionType = 'credit' | 'debit' | 'adjustment';
+
+export interface Wallet {
+  id: string;
+  tenantId: string;
+  balance: number;
+  currency: string;
+  createdAt: string;
+}
+
+export interface WalletTransaction {
+  id: string;
+  walletId: string;
+  tenantId: string;
+  type: TransactionType;
+  amount: number;
+  currency: string;
+  description: string;
+  referenceType: string | null;
+  referenceId: string | null;
+  balanceAfter: number;
   createdAt: string;
 }
 
@@ -252,6 +288,7 @@ export interface DashboardStats {
     name: string;
     subscriptionStatus: TenantStatus;
     billingRegion: BillingRegion;
+    businessType: BusinessType;
   };
   stats: {
     totalCenters: number;

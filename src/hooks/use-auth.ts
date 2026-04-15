@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 import type { ReactNode } from 'react';
 import { createElement } from 'react';
 import api from '../lib/api';
-import type { User, BillingRegion } from '../types';
+import type { User, BillingRegion, BusinessType } from '../types';
 
 interface AuthState {
   user: User | null;
@@ -24,6 +24,7 @@ interface RegisterData {
   password: string;
   businessName: string;
   billingRegion: BillingRegion;
+  businessType?: BusinessType;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);

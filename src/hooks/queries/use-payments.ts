@@ -15,12 +15,36 @@ export function usePayments(childId?: string, status?: string) {
   });
 }
 
+export function usePayment(id: string) {
+  return useQuery({
+    queryKey: ['payments', id],
+    queryFn: async () => {
+      const res = await api.get(`/payments/${id}`);
+      return res.data.data as FeePayment;
+    },
+    enabled: !!id,
+  });
+}
+
+export interface LineItemInput {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}
+
 export function useCreateFee() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { childId: string; description?: string; amount: number; currency?: string; dueDate: string }) => {
+    mutationFn: async (data: {
+      childId: string;
+      description?: string;
+      amount?: number;
+      currency?: string;
+      dueDate: string;
+      lineItems?: LineItemInput[];
+    }) => {
       const res = await api.post('/payments', data);
-      return res.data.data;
+      return res.data.data as FeePayment;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['payments'] }),
   });
@@ -45,5 +69,14 @@ export function useMarkAsPaid() {
       return res.data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['payments'] }),
+  });
+}
+
+export function useShareViaWhatsApp() {
+  return useMutation({
+    mutationFn: async (data: { feePaymentId: string }) => {
+      const res = await api.post('/payments/share-whatsapp', data);
+      return res.data.data as { success: boolean; guardianPhone: string };
+    },
   });
 }

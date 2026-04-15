@@ -25,6 +25,7 @@ import StaffPage from './pages/staff/index';
 import PickupCodesPage from './pages/pickup-codes/index';
 import NotificationsPage from './pages/notifications/index';
 import VerificationPage from './pages/verification/index';
+import WalletPage from './pages/wallet/index';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -79,6 +80,7 @@ export default function App() {
               <Route path="pickup-codes" element={<PickupCodesPage />} />
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="verification" element={<VerificationPage />} />
+              <Route path="wallet" element={<WalletPage />} />
             </Route>
 
             {/* Catch-all redirect */}
