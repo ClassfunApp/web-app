@@ -7,7 +7,7 @@ import { Textarea } from '../../components/ui/textarea';
 import { Button } from '../../components/ui/button';
 import { useCreateChild, useUpdateChild } from '../../hooks/queries/use-children';
 import { useFamilies, useCreateFamily } from '../../hooks/queries/use-families';
-import type { Child } from '../../types';
+import type { Child, GuardianRelationship } from '../../types';
 
 interface Props {
   open: boolean;
@@ -19,7 +19,7 @@ interface NewGuardian {
   fullName: string;
   phone: string;
   email: string;
-  relationship: string;
+  relationship: GuardianRelationship;
 }
 
 export function ChildForm({ open, onClose, child }: Props) {
@@ -99,8 +99,8 @@ export function ChildForm({ open, onClose, child }: Props) {
                 fullName: newGuardian.fullName,
                 phone: newGuardian.phone,
                 email: newGuardian.email || undefined,
-                relationship: newGuardian.relationship || 'guardian',
-              },
+                relationship: newGuardian.relationship,
+              } as const,
             ]
           : [];
 
