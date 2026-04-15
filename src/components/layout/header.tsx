@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { LogOut, Bell, Search, HelpCircle, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/use-auth';
@@ -22,9 +23,28 @@ export function Header() {
   const { user, logout } = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
   const location = useLocation();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    if (confirm('Are you sure you want to logout?')) {
+      logout();
+    }
   };
 
   const title = Object.entries(PAGE_TITLES).find(([path]) =>
@@ -69,21 +89,39 @@ export function Header() {
           <Search size={18} />
         </button>
 
-        {/* User */}
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 lg:gap-2.5 ml-1 pl-2 lg:pl-3 border-l border-slate-200 dark:border-slate-700 hover:opacity-80 transition-opacity"
-        >
-          <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">
-            <span className="text-white text-xs font-bold">{initials}</span>
-          </div>
-          <div className="text-left hidden sm:block">
-            <p className="text-[13px] font-semibold text-slate-800 dark:text-slate-100 leading-none">{user?.fullName}</p>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 capitalize mt-0.5">{user?.role?.replace('_', ' ')}</p>
-          </div>
-          <ChevronDown size={14} className="text-slate-400 dark:text-slate-500 hidden sm:block" />
-          <LogOut size={14} className="text-slate-400 dark:text-slate-500 ml-1" />
-        </button>
+        {/* User Dropdown */}
+        <div ref={dropdownRef} className="relative">
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="flex items-center gap-2 lg:gap-2.5 ml-1 pl-2 lg:pl-3 border-l border-slate-200 dark:border-slate-700 hover:opacity-80 transition-opacity"
+          >
+            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">
+              <span className="text-white text-xs font-bold">{initials}</span>
+            </div>
+            <div className="text-left hidden sm:block">
+              <p className="text-[13px] font-semibold text-slate-800 dark:text-slate-100 leading-none">{user?.fullName}</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 capitalize mt-0.5">{user?.role?.replace('_', ' ')}</p>
+            </div>
+            <ChevronDown size={14} className="text-slate-400 dark:text-slate-500 hidden sm:block" />
+          </button>
+
+          {/* Dropdown Menu */}
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-1 z-50">
+              <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800 sm:hidden">
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{user?.fullName}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 capitalize">{user?.role?.replace('_', ' ')}</p>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
