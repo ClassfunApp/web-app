@@ -19,6 +19,7 @@ import {
   Menu,
   X,
   Settings,
+  Receipt,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -100,6 +101,10 @@ export function Sidebar() {
     { to: "/payments", icon: CreditCard, label: "Payments" },
     { to: "/wallet", icon: Wallet, label: "Wallet" },
     { to: "/settings/branding", icon: Settings, label: "Settings" },
+  ];
+
+  const ownerNav = [
+    { to: "/subscription", icon: Receipt, label: "Subscription" },
   ];
 
   const managementNav = [
@@ -257,6 +262,29 @@ export function Sidebar() {
               </NavLink>
             </div>
           </div>
+
+          {/* Billing — owner only */}
+          {isOwner && (
+            <div>
+              <div className="flex items-center justify-between px-3 mb-2">
+                <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                  Billing
+                </span>
+                <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
+              </div>
+              <div className="space-y-0.5 stagger-children">
+                {ownerNav.map((item) => (
+                  <NavItem
+                    key={item.to}
+                    to={item.to}
+                    icon={item.icon}
+                    label={item.label}
+                    onClick={closeMobileMenu}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </nav>
       </aside>
     </>

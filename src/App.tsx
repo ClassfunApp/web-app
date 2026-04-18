@@ -28,6 +28,7 @@ import VerificationPage from './pages/verification/index';
 import WalletPage from './pages/wallet/index';
 import EnrollPage from './pages/enroll/index';
 import BrandingPage from './pages/settings/branding';
+import SubscriptionPage from './pages/subscription/index';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -85,6 +86,7 @@ export default function App() {
               <Route path="verification" element={<VerificationPage />} />
               <Route path="wallet" element={<WalletPage />} />
               <Route path="settings/branding" element={<BrandingPage />} />
+              <Route path="subscription" element={<SubscriptionPage />} />
             </Route>
 
             {/* Catch-all redirect */}
