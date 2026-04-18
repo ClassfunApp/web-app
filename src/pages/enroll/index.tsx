@@ -87,7 +87,7 @@ function SelectInput({
 
 export default function EnrollPage() {
   const { tenantId } = useParams<{ tenantId: string }>();
-  const { data: tenant, isLoading: tenantLoading, isError: tenantError } = useEnrollmentPage(tenantId!);
+  const { data: tenant, isLoading: tenantLoading, isError: tenantError, error: tenantErrorObj } = useEnrollmentPage(tenantId!);
   const submitMutation = useSubmitEnrollment(tenantId!);
 
   const [familyName, setFamilyName] = useState('');
@@ -176,6 +176,12 @@ export default function EnrollPage() {
   }
 
   if (tenantError || !tenant) {
+    // Extract error message from axios error response if available
+    const errorMsg = (tenantErrorObj as { response?: { data?: { message?: string } } })?.response?.data?.message
+      || (tenantErrorObj as Error)?.message
+      || '';
+    const isNetworkError = errorMsg.includes('Network Error') || !errorMsg;
+
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <div className="text-center max-w-sm">
@@ -183,7 +189,14 @@ export default function EnrollPage() {
             <AlertCircle size={24} className="text-red-500" />
           </div>
           <h1 className="text-lg font-bold text-slate-800 mb-1">Enrollment page not found</h1>
-          <p className="text-sm text-slate-500">This enrollment link is invalid or has expired.</p>
+          <p className="text-sm text-slate-500 mb-4">
+            This enrollment link is invalid or has expired.
+          </p>
+          {errorMsg && (
+            <div className="text-xs text-red-600 bg-red-50 rounded-lg p-3 font-mono break-words">
+              {isNetworkError ? 'Network error: Cannot connect to server' : errorMsg}
+            </div>
+          )}
         </div>
       </div>
     );
