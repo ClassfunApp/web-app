@@ -245,7 +245,7 @@ export default function StaffPage() {
         <Card>
           <Table
             columns={columns}
-            data={(users as unknown as Record<string, unknown>[]) || []}
+            data={(users ?? []) as unknown as Record<string, unknown>[]}
             emptyMessage="No staff members found"
           />
         </Card>

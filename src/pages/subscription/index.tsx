@@ -89,7 +89,7 @@ export default function SubscriptionPage() {
       <Card>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left side */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
               <Badge status={status?.plan ?? 'monthly'} label={(status?.plan ?? 'monthly').toUpperCase()} />
               <Badge status={status?.status ?? 'trial'} label={(status?.status ?? 'trial').toUpperCase()} />
