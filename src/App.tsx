@@ -26,6 +26,9 @@ import PickupCodesPage from './pages/pickup-codes/index';
 import NotificationsPage from './pages/notifications/index';
 import VerificationPage from './pages/verification/index';
 import WalletPage from './pages/wallet/index';
+import ReportsPage from './pages/reports/index';
+import GradesPage from './pages/grades/index';
+import PermissionsPage from './pages/permissions/index';
 import EnrollPage from './pages/enroll/index';
 import BrandingPage from './pages/settings/branding';
 import SubscriptionPage from './pages/subscription/index';
@@ -85,6 +88,9 @@ export default function App() {
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="verification" element={<VerificationPage />} />
               <Route path="wallet" element={<WalletPage />} />
+              <Route path="reports" element={<ReportsPage />} />
+              <Route path="grades" element={<GradesPage />} />
+              <Route path="permissions" element={<PermissionsPage />} />
               <Route path="settings/branding" element={<BrandingPage />} />
               <Route path="subscription" element={<SubscriptionPage />} />
             </Route>

@@ -209,6 +209,93 @@ export interface WalletTransaction {
   createdAt: string;
 }
 
+export type ReportStatus = 'draft' | 'submitted' | 'approved' | 'published';
+
+export interface Report {
+  id: string;
+  tenantId: string;
+  childId: string;
+  enrollmentId: string | null;
+  authoredBy: string;
+  period: string;
+  content: string | null;
+  attachments: string[] | null;
+  status: ReportStatus;
+  child?: { id: string; fullName: string; photoUrl: string | null };
+  enrollment?: { id: string; activity?: { id: string; name: string } } | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Grade {
+  id: string;
+  tenantId: string;
+  childId: string;
+  enrollmentId: string;
+  gradedBy: string;
+  period: string;
+  score: number | null;
+  maxScore: number | null;
+  letterGrade: string | null;
+  comments: string | null;
+  gradedAt: string;
+  isPublished: boolean;
+  child?: { id: string; fullName: string; photoUrl: string | null };
+  enrollment?: { id: string; activity?: { id: string; name: string } };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type WithdrawalStatus = 'pending' | 'processing' | 'success' | 'failed' | 'reversed';
+
+export interface BankBeneficiary {
+  id: string;
+  tenantId: string;
+  accountName: string;
+  accountNumber: string;
+  bankCode: string;
+  bankName: string;
+  paystackRecipientCode: string;
+  isDefault: boolean;
+  createdAt: string;
+}
+
+export interface Withdrawal {
+  id: string;
+  tenantId: string;
+  walletId: string;
+  beneficiaryId: string;
+  amount: number;
+  currency: string;
+  status: WithdrawalStatus;
+  paystackTransferCode: string | null;
+  paystackReference: string | null;
+  reason: string | null;
+  failureReason: string | null;
+  completedAt: string | null;
+  createdAt: string;
+}
+
+export type StaffPermissionType = 'validate_pickup' | 'show_center_qr';
+
+export interface StaffPermission {
+  id: string;
+  tenantId: string;
+  userId: string;
+  centerId: string;
+  permission: StaffPermissionType;
+  grantedBy: string;
+  user?: { id: string; fullName: string; email: string };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaystackBank {
+  id: number;
+  name: string;
+  code: string;
+}
+
 export interface PickupCode {
   id: string;
   childId: string;

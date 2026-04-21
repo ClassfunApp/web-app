@@ -20,6 +20,9 @@ import {
   X,
   Settings,
   Receipt,
+  FileText,
+  GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -100,6 +103,8 @@ export function Sidebar() {
     { to: "/attendance", icon: CalendarCheck, label: "Attendance" },
     { to: "/payments", icon: CreditCard, label: "Payments" },
     { to: "/wallet", icon: Wallet, label: "Wallet" },
+    { to: "/reports", icon: FileText, label: "Reports" },
+    { to: "/grades", icon: GraduationCap, label: "Grades" },
     { to: "/settings/branding", icon: Settings, label: "Settings" },
   ];
 
@@ -110,6 +115,7 @@ export function Sidebar() {
   const managementNav = [
     { to: "/centers", icon: Building2, label: isSchool ? "Campuses" : "Centers", ownerOnly: true },
     { to: "/staff", icon: UserCog, label: isSchool ? "Staff & Teachers" : "Staff", ownerOnly: true },
+    { to: "/permissions", icon: ShieldCheck, label: "Permissions" },
     { to: "/pickup-codes", icon: QrCode, label: "Pickup Codes" },
     { to: "/notifications", icon: Bell, label: "Notifications" },
   ];
