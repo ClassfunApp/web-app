@@ -22,7 +22,6 @@ import {
   Receipt,
   FileText,
   GraduationCap,
-  ShieldCheck,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";

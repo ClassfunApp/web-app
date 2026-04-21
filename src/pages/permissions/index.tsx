@@ -8,7 +8,7 @@ import { Card } from '../../components/ui/card';
 import { Select } from '../../components/ui/select';
 import { Badge } from '../../components/ui/badge';
 import { Loading } from '../../components/ui/loading';
-import type { User, StaffPermissionType } from '../../types';
+import type { StaffPermissionType } from '../../types';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -237,9 +237,8 @@ export default function PermissionsPage() {
                         </p>
                         <Badge
                           status={u.role === 'teacher' ? 'active' : 'pending'}
-                          className="mt-1.5"
                         >
-                          {u.role}
+                          <span className="mt-1.5">{u.role}</span>
                         </Badge>
                       </td>
 
