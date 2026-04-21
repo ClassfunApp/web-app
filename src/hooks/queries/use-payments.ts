@@ -72,6 +72,24 @@ export function useMarkAsPaid() {
   });
 }
 
+export function useCreateBulkFee() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: {
+      childIds: string[];
+      description?: string;
+      amount?: number;
+      currency?: string;
+      dueDate: string;
+      lineItems?: LineItemInput[];
+    }) => {
+      const res = await api.post('/payments/bulk', data);
+      return res.data.data as FeePayment[];
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['payments'] }),
+  });
+}
+
 export function useShareViaWhatsApp() {
   return useMutation({
     mutationFn: async (data: { feePaymentId: string }) => {

@@ -8,6 +8,7 @@ import { Badge } from '../../components/ui/badge';
 import { Select } from '../../components/ui/select';
 import { Loading } from '../../components/ui/loading';
 import { FeeForm } from './fee-form';
+import { BulkFeeForm } from './bulk-fee-form';
 import { InvoiceModal } from './invoice-modal';
 import { formatCurrency, formatDate } from '../../lib/utils';
 import type { FeePayment } from '../../types';
@@ -18,6 +19,7 @@ export default function PaymentsPage() {
   const generateLink = useGeneratePaymentLink();
   const markPaid = useMarkAsPaid();
   const [formOpen, setFormOpen] = useState(false);
+  const [bulkFormOpen, setBulkFormOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState<FeePayment | null>(null);
   const [invoiceOpen, setInvoiceOpen] = useState(false);
 
@@ -77,9 +79,14 @@ export default function PaymentsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Payments & Fees</h1>
-        <Button onClick={() => setFormOpen(true)}>
-          <Plus size={16} className="mr-2" /> Create Invoice
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => setBulkFormOpen(true)}>
+            <Plus size={16} className="mr-2" /> Bulk Invoice
+          </Button>
+          <Button onClick={() => setFormOpen(true)}>
+            <Plus size={16} className="mr-2" /> Create Invoice
+          </Button>
+        </div>
       </div>
 
       <div className="w-48">
@@ -108,6 +115,7 @@ export default function PaymentsPage() {
       )}
 
       <FeeForm open={formOpen} onClose={() => setFormOpen(false)} />
+      <BulkFeeForm open={bulkFormOpen} onClose={() => setBulkFormOpen(false)} />
 
       <InvoiceModal payment={selectedPayment} open={invoiceOpen} onClose={closeInvoice} />
     </div>
