@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Plus, QrCode, Trash2, Pencil, Building2 } from 'lucide-react';
-import { useCenters, useDeleteCenter, useGenerateQrCode } from '../../hooks/queries/use-centers';
+import { Plus, QrCode, Trash2, Pencil, Building2, PowerOff, Power } from 'lucide-react';
+import { useCenters, useDeleteCenter, useGenerateQrCode, useUpdateCenter } from '../../hooks/queries/use-centers';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
@@ -13,6 +13,7 @@ export default function CentersPage() {
   const { data: centers, isLoading } = useCenters();
   const deleteCenter = useDeleteCenter();
   const generateQr = useGenerateQrCode();
+  const updateCenter = useUpdateCenter();
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Center | null>(null);
   const [qrModal, setQrModal] = useState<{ url: string; name: string } | null>(null);
@@ -53,6 +54,19 @@ export default function CentersPage() {
                   }}
                 >
                   <QrCode size={14} className="mr-1" /> QR Code
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className={center.status === 'active' ? 'text-amber-500 hover:text-amber-700' : 'text-green-600 hover:text-green-800'}
+                  onClick={() => {
+                    const newStatus = center.status === 'active' ? 'inactive' : 'active';
+                    if (confirm(`${newStatus === 'inactive' ? 'Deactivate' : 'Activate'} "${center.name}"?`)) {
+                      updateCenter.mutate({ id: center.id, status: newStatus as any });
+                    }
+                  }}
+                >
+                  {center.status === 'active' ? <PowerOff size={14} /> : <Power size={14} />}
                 </Button>
                 <Button
                   size="sm"

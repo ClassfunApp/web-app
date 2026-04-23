@@ -43,6 +43,17 @@ export function useDeleteActivity() {
   });
 }
 
+export function useCreateEnrollment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: { childId: string; activityId: string; classLevelId?: string }) => {
+      const res = await api.post('/enrollments', data);
+      return res.data.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['enrollments'] }),
+  });
+}
+
 export function useCreateClassLevel() {
   const qc = useQueryClient();
   return useMutation({

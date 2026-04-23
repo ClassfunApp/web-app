@@ -114,6 +114,8 @@ export interface Activity {
   coverImageUrl: string | null;
   feeAmount: number;
   feeCurrency: string;
+  startTime: string | null;
+  endTime: string | null;
   schedule: Record<string, unknown> | null;
   isActive: boolean;
   center?: Center;
