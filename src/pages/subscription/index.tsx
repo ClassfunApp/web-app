@@ -1,4 +1,5 @@
-import { CreditCard, Users, CalendarClock, TrendingDown } from 'lucide-react';
+import { useState } from 'react';
+import { CreditCard, Users, CalendarClock, TrendingDown, Wallet, X } from 'lucide-react';
 import {
   useSubscriptionStatus,
   useSubscriptionInvoices,
@@ -25,10 +26,34 @@ export default function SubscriptionPage() {
   const { data: invoices, isLoading: invoicesLoading } = useSubscriptionInvoices();
   const payMutation = usePaySubscription();
   const changePlan = useChangeSubscriptionPlan();
+  const [methodPickerOpen, setMethodPickerOpen] = useState(false);
 
-  async function handlePayNow() {
-    const result = await payMutation.mutateAsync();
-    window.open(result.checkoutUrl, '_blank');
+  const providerLabel = status?.paymentProvider === 'flutterwave' ? 'Flutterwave' : 'Paystack';
+  const outstandingAmount = status?.outstandingInvoice?.amount ?? 0;
+  const outstandingCurrency = status?.outstandingInvoice?.currency ?? '';
+  const walletBalance = status?.wallet?.balance ?? 0;
+  const walletCurrency = status?.wallet?.currency ?? '';
+  const walletCanPay =
+    !!status?.outstandingInvoice &&
+    walletCurrency === outstandingCurrency &&
+    walletBalance >= outstandingAmount;
+
+  function handlePayNow() {
+    setMethodPickerOpen(true);
+  }
+
+  async function payWithMethod(method: 'wallet' | 'gateway') {
+    setMethodPickerOpen(false);
+    try {
+      const result = await payMutation.mutateAsync(method);
+      if (result.method === 'wallet') {
+        alert('Payment successful — your subscription is now active.');
+      } else {
+        window.open(result.checkoutUrl, '_blank');
+      }
+    } catch (err) {
+      alert((err as Error).message);
+    }
   }
 
   async function handleTogglePlan() {
@@ -63,10 +88,7 @@ export default function SubscriptionPage() {
             <Button
               size="sm"
               variant="ghost"
-              onClick={async () => {
-                const res = await payMutation.mutateAsync();
-                window.open(res.checkoutUrl, '_blank');
-              }}
+              onClick={() => setMethodPickerOpen(true)}
             >
               Pay
             </Button>
@@ -175,6 +197,72 @@ export default function SubscriptionPage() {
           iconColor="text-amber-600 dark:text-amber-400"
         />
       </div>
+
+      {/* Payment method picker modal */}
+      {methodPickerOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={() => setMethodPickerOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-lg bg-white dark:bg-slate-900 p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                Choose payment method
+              </h3>
+              <button
+                onClick={() => setMethodPickerOpen(false)}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+              Outstanding: {formatCurrency(outstandingAmount, outstandingCurrency)}
+            </p>
+
+            <div className="space-y-3">
+              <button
+                disabled={!walletCanPay || payMutation.isPending}
+                onClick={() => payWithMethod('wallet')}
+                className="w-full text-left p-4 border rounded-lg hover:border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-start gap-3"
+              >
+                <Wallet size={20} className="text-indigo-500 shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-medium text-slate-900 dark:text-slate-100">Wallet</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Balance: {formatCurrency(walletBalance, walletCurrency)}
+                    {!walletCanPay && status?.outstandingInvoice
+                      ? walletCurrency !== outstandingCurrency
+                        ? ` · currency mismatch with ${outstandingCurrency}`
+                        : ' · insufficient funds'
+                      : ''}
+                  </div>
+                </div>
+              </button>
+
+              <button
+                disabled={payMutation.isPending}
+                onClick={() => payWithMethod('gateway')}
+                className="w-full text-left p-4 border rounded-lg hover:border-indigo-500 disabled:opacity-50 flex items-start gap-3"
+              >
+                <CreditCard size={20} className="text-indigo-500 shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-medium text-slate-900 dark:text-slate-100">
+                    Card / Bank ({providerLabel})
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Opens a secure checkout powered by {providerLabel}.
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Invoice History */}
       <div>

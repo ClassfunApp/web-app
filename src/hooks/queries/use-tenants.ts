@@ -22,6 +22,19 @@ export function useTenant() {
   });
 }
 
+export function useUpdateTenant() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (patch: Partial<Tenant>) => {
+      const res = await api.patch('/tenants', patch);
+      return res.data.data as Tenant;
+    },
+    onSuccess: (updated) => {
+      queryClient.setQueryData(['tenant'], updated);
+    },
+  });
+}
+
 export function useUploadLogo() {
   const queryClient = useQueryClient();
   return useMutation({

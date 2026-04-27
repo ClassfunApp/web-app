@@ -19,6 +19,7 @@ import ActivitiesPage from './pages/activities/index';
 import FamiliesPage from './pages/families/index';
 import FamilyDetailPage from './pages/families/detail';
 import EnrollmentsPage from './pages/enrollments/index';
+import EnrolmentRequestsPage from './pages/enrolment-requests/index';
 import AttendancePage from './pages/attendance/index';
 import PaymentsPage from './pages/payments/index';
 import StaffPage from './pages/staff/index';
@@ -31,6 +32,7 @@ import GradesPage from './pages/grades/index';
 import PermissionsPage from './pages/permissions/index';
 import EnrollPage from './pages/enroll/index';
 import BrandingPage from './pages/settings/branding';
+import ChildLifecyclePage from './pages/settings/child-lifecycle';
 import SubscriptionPage from './pages/subscription/index';
 
 const queryClient = new QueryClient({
@@ -81,6 +83,7 @@ export default function App() {
               <Route path="families" element={<FamiliesPage />} />
               <Route path="families/:id" element={<FamilyDetailPage />} />
               <Route path="enrollments" element={<EnrollmentsPage />} />
+              <Route path="enrolment-requests" element={<EnrolmentRequestsPage />} />
               <Route path="attendance" element={<AttendancePage />} />
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="staff" element={<StaffPage />} />
@@ -92,6 +95,7 @@ export default function App() {
               <Route path="grades" element={<GradesPage />} />
               <Route path="permissions" element={<PermissionsPage />} />
               <Route path="settings/branding" element={<BrandingPage />} />
+              <Route path="settings/child-lifecycle" element={<ChildLifecyclePage />} />
               <Route path="subscription" element={<SubscriptionPage />} />
             </Route>
 

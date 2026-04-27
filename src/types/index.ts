@@ -25,6 +25,8 @@ export interface Tenant {
   billingRegion: BillingRegion;
   billingCurrency: string;
   gracePeriodDays: number;
+  childSuspensionDays: number;
+  childDeletionDays: number;
   trialEndsAt: string | null;
   businessVerificationStatus: VerificationStatus;
   businessVerifiedAt: string | null;
@@ -144,6 +146,28 @@ export interface Enrollment {
   activity?: Activity;
   classLevel?: ClassLevel;
   createdAt: string;
+}
+
+export type EnrolmentRequestStatus = 'pending' | 'approved' | 'rejected';
+
+export interface EnrolmentRequest {
+  id: string;
+  tenantId: string;
+  familyId: string;
+  requestedByUserId: string;
+  childFullName: string;
+  childDob: string | null;
+  childGender: string | null;
+  activityId: string | null;
+  note: string | null;
+  status: EnrolmentRequestStatus;
+  decisionReason: string | null;
+  decidedAt: string | null;
+  createdAt: string;
+  family?: Family;
+  requestedBy?: User;
+  activity?: Activity | null;
+  decidedBy?: User | null;
 }
 
 export interface Attendance {
@@ -317,7 +341,14 @@ export interface NotificationLog {
   recipientId: string;
   type: NotificationType;
   template: string | null;
+  /** Semantic event key, e.g. "attendance_sign_in", "enrolment_request_approved" */
+  event: string | null;
+  /** Human-readable title saved at send time */
+  title: string | null;
+  /** Human-readable body saved at send time */
+  body: string | null;
   status: NotificationStatus;
+  isRead: boolean;
   sentAt: string;
   createdAt: string;
 }

@@ -31,7 +31,13 @@ export interface SubscriptionStatus {
     dueDate: string;
   } | null;
   outstandingInvoice: SubscriptionInvoice | null;
+  wallet: { balance: number; currency: string };
+  paymentProvider: 'paystack' | 'flutterwave';
 }
+
+export type PaySubscriptionResult =
+  | { method: 'wallet'; success: true; invoice: SubscriptionInvoice }
+  | { method: 'gateway'; checkoutUrl: string; reference: string; provider: string };
 
 export function useSubscriptionStatus() {
   return useQuery({
@@ -56,12 +62,13 @@ export function useSubscriptionInvoices() {
 export function usePaySubscription() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async () => {
-      const res = await api.post('/subscription/invoices/pay');
-      return res.data.data as { checkoutUrl: string };
+    mutationFn: async (method: 'wallet' | 'gateway' = 'gateway') => {
+      const res = await api.post('/subscription/invoices/pay', { method });
+      return res.data.data as PaySubscriptionResult;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['subscription'] });
+      qc.invalidateQueries({ queryKey: ['wallet'] });
     },
   });
 }

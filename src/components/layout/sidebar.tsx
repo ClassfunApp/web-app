@@ -22,6 +22,7 @@ import {
   Receipt,
   FileText,
   GraduationCap,
+  Inbox,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -99,12 +100,14 @@ export function Sidebar() {
     { to: "/families", icon: UsersRound, label: "Families" },
     { to: "/activities", icon: Dumbbell, label: terms.activities },
     { to: "/enrollments", icon: ClipboardList, label: "Enrollments" },
+    { to: "/enrolment-requests", icon: Inbox, label: "Enrolment Requests" },
     { to: "/attendance", icon: CalendarCheck, label: "Attendance" },
     { to: "/payments", icon: CreditCard, label: "Payments" },
     { to: "/wallet", icon: Wallet, label: "Wallet" },
     { to: "/reports", icon: FileText, label: "Reports" },
     { to: "/grades", icon: GraduationCap, label: "Grades" },
     { to: "/settings/branding", icon: Settings, label: "Settings" },
+    { to: "/settings/child-lifecycle", icon: Settings, label: "Child Lifecycle" },
   ];
 
   const ownerNav = [

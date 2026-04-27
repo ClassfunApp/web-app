@@ -26,16 +26,66 @@ export default function NotificationsPage() {
   };
 
   const columns = [
-    { key: 'type', header: 'Type', render: (n: NotificationLog) => (
-      <Badge status={n.type === 'whatsapp' ? 'active' : 'pending'}>{n.type}</Badge>
-    )},
-    { key: 'template', header: 'Template', render: (n: NotificationLog) => n.template || '—' },
-    { key: 'status', header: 'Status', render: (n: NotificationLog) => (
-      <Badge status={n.status === 'sent' ? 'paid' : n.status === 'delivered' ? 'active' : 'overdue'}>
-        {n.status}
-      </Badge>
-    )},
-    { key: 'sentAt', header: 'Sent At', render: (n: NotificationLog) => formatDateTime(n.sentAt) },
+    {
+      key: 'type',
+      header: 'Type',
+      render: (n: NotificationLog) => (
+        <Badge status={n.type === 'whatsapp' ? 'active' : n.type === 'push' ? 'pending' : 'draft'}>
+          {n.type}
+        </Badge>
+      ),
+    },
+    {
+      key: 'message',
+      header: 'Message',
+      render: (n: NotificationLog) =>
+        n.title ? (
+          <div>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">{n.title}</p>
+            {n.body && (
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                {n.body}
+              </p>
+            )}
+          </div>
+        ) : (
+          <span className="text-slate-500 text-sm">{n.template || n.event || '—'}</span>
+        ),
+    },
+    {
+      key: 'event',
+      header: 'Event',
+      render: (n: NotificationLog) =>
+        n.event ? (
+          <span className="text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded">
+            {n.event}
+          </span>
+        ) : (
+          <span className="text-slate-400">—</span>
+        ),
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      render: (n: NotificationLog) => (
+        <Badge
+          status={
+            n.status === 'delivered' ? 'active' : n.status === 'sent' ? 'paid' : 'overdue'
+          }
+        >
+          {n.status}
+        </Badge>
+      ),
+    },
+    {
+      key: 'sentAt',
+      header: 'Sent At',
+      render: (n: NotificationLog) => (
+        <span className="text-sm text-slate-600 dark:text-slate-400">
+          {formatDateTime(n.sentAt)}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -47,13 +97,23 @@ export default function NotificationsPage() {
         </Button>
       </div>
 
-      {isLoading ? <Loading /> : (
+      {isLoading ? (
+        <Loading />
+      ) : (
         <Card>
-          <Table columns={columns} data={notifications as unknown as Record<string, unknown>[] || []} emptyMessage="No notifications yet" />
+          <Table
+            columns={columns}
+            data={(notifications as unknown as Record<string, unknown>[]) || []}
+            emptyMessage="No notifications sent yet"
+          />
         </Card>
       )}
 
-      <Modal open={broadcastOpen} onClose={() => setBroadcastOpen(false)} title="Send Broadcast Message">
+      <Modal
+        open={broadcastOpen}
+        onClose={() => setBroadcastOpen(false)}
+        title="Send Broadcast Message"
+      >
         <form onSubmit={handleSend} className="space-y-4">
           <Input
             label="Recipient Phone"
@@ -70,8 +130,12 @@ export default function NotificationsPage() {
             onChange={(e) => setForm({ ...form, message: e.target.value })}
           />
           <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="secondary" onClick={() => setBroadcastOpen(false)}>Cancel</Button>
-            <Button type="submit" disabled={sendBroadcast.isPending}>Send</Button>
+            <Button type="button" variant="secondary" onClick={() => setBroadcastOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={sendBroadcast.isPending}>
+              Send
+            </Button>
           </div>
         </form>
       </Modal>
