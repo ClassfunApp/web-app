@@ -15,7 +15,7 @@ export function useUsers() {
 export function useCreateUser() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { fullName: string; email: string; password: string; phone?: string; role: string; centerId?: string }) => {
+    mutationFn: async (data: { fullName: string; email: string; password?: string; phone?: string; role?: string; roles?: string[]; centerId?: string }) => {
       const res = await api.post('/users', data);
       return res.data.data;
     },

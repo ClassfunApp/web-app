@@ -212,7 +212,6 @@ export default function VerificationPage() {
                 <VerificationSummary
                   items={[
                     { label: 'Registration Number', value: tenantVerification?.businessRegNumber },
-                    { label: 'Tax ID (TIN)', value: tenantVerification?.taxIdNumber },
                     { label: 'Address', value: tenantVerification?.addressLine1 },
                     { label: 'City', value: tenantVerification?.city },
                     { label: 'State', value: tenantVerification?.state },

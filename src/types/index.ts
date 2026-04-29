@@ -52,6 +52,7 @@ export interface User {
   kycSubmittedAt: string | null;
   kycReviewedAt: string | null;
   kycRejectionReason: string | null;
+  tenantKycStatus?: VerificationStatus | null;
   createdAt: string;
 }
 
@@ -378,7 +379,6 @@ export interface TenantVerification {
   id: string;
   tenantId: string;
   businessRegNumber: string | null;
-  taxIdNumber: string | null;
   registrationCertificateUrl: string | null;
   addressLine1: string | null;
   addressLine2: string | null;

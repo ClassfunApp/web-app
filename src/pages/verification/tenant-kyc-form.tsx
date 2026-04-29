@@ -84,7 +84,6 @@ export function TenantKycForm({ existing, onSuccess }: Props) {
   });
   const [form, setForm] = useState({
     businessRegNumber: existing?.businessRegNumber || '',
-    taxIdNumber: existing?.taxIdNumber || '',
     addressLine1: existing?.addressLine1 || '',
     addressLine2: existing?.addressLine2 || '',
     city: existing?.city || '',
@@ -110,18 +109,12 @@ export function TenantKycForm({ existing, onSuccess }: Props) {
       {/* Business Identity */}
       <div>
         <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Business Identity</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
           <Input
             label="Business Registration Number"
             placeholder="e.g. RC123456"
             value={form.businessRegNumber}
             onChange={set('businessRegNumber')}
-          />
-          <Input
-            label="Tax Identification Number (TIN)"
-            placeholder="e.g. 12345678-0001"
-            value={form.taxIdNumber}
-            onChange={set('taxIdNumber')}
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
