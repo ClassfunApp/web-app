@@ -9,6 +9,8 @@ import { DashboardLayout } from './components/layout/dashboard-layout';
 import LoginPage from './pages/auth/login';
 import RegisterPage from './pages/auth/register';
 import VerifyContactPage from './pages/auth/verify-contact';
+import ForgotPasswordPage from './pages/auth/forgot-password';
+import ResetPasswordPage from './pages/auth/reset-password';
 
 // Dashboard pages
 import DashboardPage from './pages/dashboard';
@@ -54,6 +56,8 @@ export default function App() {
             {/* Public routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/enroll/:tenantId" element={<EnrollPage />} />
 
             {/* Requires login but NOT contact verification */}
