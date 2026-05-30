@@ -20,7 +20,7 @@ export interface Tenant {
   name: string;
   slug: string;
   logoUrl: string | null;
-  subscriptionPlan: 'monthly' | 'annual';
+  subscriptionPlan: 'quarterly' | 'annual';
   subscriptionStatus: TenantStatus;
   billingRegion: BillingRegion;
   billingCurrency: string;

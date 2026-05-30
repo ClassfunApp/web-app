@@ -169,7 +169,7 @@ export function BulkFeeForm({ open, onClose }: Props) {
           label="Description"
           value={form.description}
           onChange={set('description')}
-          placeholder="e.g. Monthly subscription fee"
+          placeholder="e.g. Quarterly subscription fee"
         />
 
         <div className="grid grid-cols-2 gap-4">

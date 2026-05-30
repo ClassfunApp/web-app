@@ -16,15 +16,19 @@ export interface SubscriptionInvoice {
   createdAt: string;
 }
 
+export type SubscriptionPlan = 'quarterly' | 'annual';
+
 export interface SubscriptionStatus {
-  plan: string;
+  plan: SubscriptionPlan;
   status: string;
   trialEndsAt: string | null;
+  renewalAnchorDate: string | null;
   childCount: number;
   billingRegion: string;
   billingCurrency: string;
-  monthlyAmount: number;
+  quarterlyAmount: number;
   annualAmount: number;
+  currentCycle: { start: string; end: string; period: string } | null;
   nextInvoice: {
     period: string;
     amount: number;
@@ -76,7 +80,7 @@ export function usePaySubscription() {
 export function useChangeSubscriptionPlan() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (plan: 'monthly' | 'annual') => {
+    mutationFn: async (plan: SubscriptionPlan) => {
       const res = await api.patch('/subscription/plan', { plan });
       return res.data.data;
     },

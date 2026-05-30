@@ -57,7 +57,7 @@ export default function SubscriptionPage() {
   }
 
   async function handleTogglePlan() {
-    const nextPlan = status?.plan === 'monthly' ? 'annual' : 'monthly';
+    const nextPlan = status?.plan === 'quarterly' ? 'annual' : 'quarterly';
     await changePlan.mutateAsync(nextPlan);
   }
 
@@ -113,7 +113,7 @@ export default function SubscriptionPage() {
           {/* Left side */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge status={status?.plan ?? 'monthly'} label={(status?.plan ?? 'monthly').toUpperCase()} />
+              <Badge status={status?.plan ?? 'quarterly'} label={(status?.plan ?? 'quarterly').toUpperCase()} />
               <Badge status={status?.status ?? 'trial'} label={(status?.status ?? 'trial').toUpperCase()} />
             </div>
 
@@ -123,13 +123,13 @@ export default function SubscriptionPage() {
               </p>
             )}
 
-            {status?.plan === 'monthly' && (
+            {status?.plan === 'quarterly' && (
               <button
                 onClick={handleTogglePlan}
                 disabled={changePlan.isPending}
                 className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline disabled:opacity-50"
               >
-                Upgrade to Annual — save 2 months
+                Upgrade to Annual — save vs quarterly
               </button>
             )}
             {status?.plan === 'annual' && (
@@ -138,7 +138,7 @@ export default function SubscriptionPage() {
                 disabled={changePlan.isPending}
                 className="text-sm text-slate-500 dark:text-slate-400 hover:underline disabled:opacity-50"
               >
-                Switch to Monthly
+                Switch to Quarterly
               </button>
             )}
           </div>
@@ -147,7 +147,7 @@ export default function SubscriptionPage() {
           <div className="flex flex-col items-start sm:items-end gap-3">
             <div className="text-right">
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                {formatCurrency(status?.monthlyAmount ?? 0, status?.billingCurrency)} / month
+                {formatCurrency(status?.quarterlyAmount ?? 0, status?.billingCurrency)} / quarter
               </p>
               <p className="text-xs text-slate-400 dark:text-slate-500">
                 {formatCurrency(status?.annualAmount ?? 0, status?.billingCurrency)} / year
@@ -176,8 +176,8 @@ export default function SubscriptionPage() {
           iconColor="text-indigo-600 dark:text-indigo-400"
         />
         <StatCard
-          title="Monthly Cost"
-          value={formatCurrency(status?.monthlyAmount ?? 0, status?.billingCurrency)}
+          title="Quarterly Cost"
+          value={formatCurrency(status?.quarterlyAmount ?? 0, status?.billingCurrency)}
           icon={<CreditCard size={20} />}
           iconBg="bg-emerald-100 dark:bg-emerald-950"
           iconColor="text-emerald-600 dark:text-emerald-400"
