@@ -6,11 +6,26 @@ const publicApi = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+export interface PublicActivity {
+  id: string;
+  name: string;
+  feeAmount: number;
+  feeCurrency: string;
+}
+
+export interface PublicCenter {
+  id: string;
+  name: string;
+  address: string | null;
+  activities: PublicActivity[];
+}
+
 export interface PublicTenantInfo {
   id: string;
   name: string;
   logoUrl: string | null;
   businessType: 'activity_center' | 'school';
+  centers: PublicCenter[];
 }
 
 export interface EnrollmentChild {
@@ -19,10 +34,12 @@ export interface EnrollmentChild {
   gender?: string;
   medicalNotes?: string;
   allergies?: string;
+  activityIds?: string[];
 }
 
 export interface EnrollmentPayload {
   familyName: string;
+  centerId?: string;
   guardian: {
     fullName: string;
     phone: string;

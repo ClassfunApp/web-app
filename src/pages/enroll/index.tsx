@@ -91,6 +91,7 @@ export default function EnrollPage() {
   const submitMutation = useSubmitEnrollment(tenantId!);
 
   const [familyName, setFamilyName] = useState('');
+  const [centerId, setCenterId] = useState('');
   const [guardian, setGuardian] = useState({
     fullName: '',
     phone: '',
@@ -116,8 +117,21 @@ export default function EnrollPage() {
     setChildren((prev) => prev.filter((c) => c._id !== id));
   }
 
-  function updateChild(id: string, field: keyof EnrollmentChild, value: string) {
+  function updateChild(id: string, field: keyof Omit<EnrollmentChild, 'activityIds'>, value: string) {
     setChildren((prev) => prev.map((c) => (c._id === id ? { ...c, [field]: value } : c)));
+  }
+
+  function toggleChildActivity(id: string, activityId: string) {
+    setChildren((prev) =>
+      prev.map((c) => {
+        if (c._id !== id) return c;
+        const current = c.activityIds ?? [];
+        const next = current.includes(activityId)
+          ? current.filter((a) => a !== activityId)
+          : [...current, activityId];
+        return { ...c, activityIds: next };
+      }),
+    );
   }
 
   function toggleChildExpand(id: string) {
@@ -137,6 +151,10 @@ export default function EnrollPage() {
       setFormError('Please select your relationship to the children.');
       return;
     }
+    if ((tenant?.centers?.length ?? 0) > 0 && !centerId) {
+      setFormError('Please select a centre.');
+      return;
+    }
     if (children.some((c) => !c.fullName.trim())) {
       setFormError("Please enter a name for each child.");
       return;
@@ -145,6 +163,7 @@ export default function EnrollPage() {
     try {
       await submitMutation.mutateAsync({
         familyName,
+        centerId: centerId || undefined,
         guardian: {
           fullName: guardian.fullName,
           phone: guardian.phone,
@@ -223,6 +242,11 @@ export default function EnrollPage() {
   }
 
   const isSchool = tenant.businessType === 'school';
+  const centers = tenant.centers ?? [];
+  const selectedCenter = centers.find((c) => c.id === centerId);
+  const centerActivities = selectedCenter?.activities ?? [];
+  const currency = (amount: number, code: string) =>
+    `${code} ${amount.toLocaleString()}`;
 
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-4">
@@ -260,6 +284,23 @@ export default function EnrollPage() {
               value={familyName}
               onChange={(e) => setFamilyName(e.target.value)}
             />
+
+            {centers.length > 0 && (
+              <SelectInput
+                label={isSchool ? 'Campus / Location' : 'Centre'}
+                required
+                options={centers.map((c) => ({
+                  value: c.id,
+                  label: c.address ? `${c.name} — ${c.address}` : c.name,
+                }))}
+                value={centerId}
+                onChange={(e) => {
+                  setCenterId(e.target.value);
+                  // Activities are centre-specific — clear prior picks on switch.
+                  setChildren((prev) => prev.map((c) => ({ ...c, activityIds: [] })));
+                }}
+              />
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <TextInput
@@ -354,6 +395,40 @@ export default function EnrollPage() {
                         )}
                       </div>
                     </div>
+
+                    {/* Activities (optional) — only when the chosen centre has any */}
+                    {centerActivities.length > 0 && (
+                      <div className="px-4 py-3 border-t border-slate-100">
+                        <p className="text-xs font-medium text-slate-500 mb-2">
+                          Activities <span className="text-slate-400">(optional)</span>
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {centerActivities.map((act) => {
+                            const checked = (child.activityIds ?? []).includes(act.id);
+                            return (
+                              <button
+                                key={act.id}
+                                type="button"
+                                onClick={() => toggleChildActivity(child._id, act.id)}
+                                className={cn(
+                                  'px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+                                  checked
+                                    ? 'bg-indigo-600 text-white border-indigo-600'
+                                    : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300',
+                                )}
+                              >
+                                {act.name}
+                                {act.feeAmount > 0 && (
+                                  <span className={cn('ml-1', checked ? 'text-indigo-200' : 'text-slate-400')}>
+                                    · {currency(act.feeAmount, act.feeCurrency)}
+                                  </span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Expandable details */}
                     {expanded && (
