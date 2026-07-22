@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Plus, Trash2, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Loader2, Smartphone, Download, ArrowRight } from 'lucide-react';
 import {
   useEnrollmentPage,
   useSubmitEnrollment,
@@ -222,19 +222,51 @@ export default function EnrollPage() {
   }
 
   if (submitted) {
+    const downloadUrl = submitMutation.data?.appDownloadUrl || 'https://onelink.to/6q9urm';
+
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="text-center max-w-sm">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
+        <div className="text-center max-w-md w-full bg-white rounded-3xl border border-slate-100 shadow-xl p-8 space-y-6">
           {tenant.logoUrl && (
-            <img src={tenant.logoUrl} alt={tenant.name} className="h-12 mx-auto mb-6 object-contain" />
+            <img src={tenant.logoUrl} alt={tenant.name} className="h-12 mx-auto object-contain" />
           )}
-          <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 size={28} className="text-emerald-500" />
+          <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto shadow-inner">
+            <CheckCircle2 size={36} className="text-emerald-500" />
           </div>
-          <h1 className="text-xl font-bold text-slate-800 mb-2">You're enrolled!</h1>
-          <p className="text-sm text-slate-500 leading-relaxed">
-            Thanks for registering with <span className="font-semibold text-slate-700">{tenant.name}</span>.
-            They'll be in touch with next steps.
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">You're enrolled!</h1>
+            <p className="text-sm text-slate-500 leading-relaxed mt-1">
+              Thanks for registering with <span className="font-semibold text-slate-700">{tenant.name}</span>.
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 text-left border border-indigo-100 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-sm">
+                <Smartphone size={20} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-800">Get the Classfun App</h3>
+                <p className="text-xs text-slate-500">Stay connected with your child's activities</p>
+              </div>
+            </div>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Download our mobile app to track daily attendance, view activity reports, and receive real-time notifications.
+            </p>
+            <a
+              href={downloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-200"
+            >
+              <Download size={16} />
+              <span>Download Mobile App</span>
+              <ArrowRight size={16} className="ml-1" />
+            </a>
+          </div>
+
+          <p className="text-xs text-slate-400">
+            Powered by <span className="font-semibold text-slate-500">Classfun</span>
           </p>
         </div>
       </div>

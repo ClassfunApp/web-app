@@ -65,7 +65,7 @@ export function useSubmitEnrollment(tenantId: string) {
   return useMutation({
     mutationFn: async (payload: EnrollmentPayload) => {
       const res = await publicApi.post(`/public/enroll/${tenantId}`, payload);
-      return res.data.data as { familyId: string; childrenCount: number; message: string };
+      return res.data.data as { familyId: string; childrenCount: number; message: string; appDownloadUrl?: string };
     },
   });
 }
