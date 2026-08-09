@@ -20,8 +20,13 @@ export type SubscriptionPlan = 'quarterly' | 'annual';
 
 export interface SubscriptionStatus {
   plan: SubscriptionPlan;
-  status: string;
+  status: 'trial' | 'active' | 'suspended';
+  phase: 'trial' | 'notice' | 'active' | 'suspended';
+  accessAllowed: boolean;
   trialEndsAt: string | null;
+  trialDaysRemaining: number | null;
+  noticeDaysRemaining: number | null;
+  noticePeriodEndsAt: string | null;
   renewalAnchorDate: string | null;
   childCount: number;
   billingRegion: string;
@@ -43,13 +48,14 @@ export type PaySubscriptionResult =
   | { method: 'wallet'; success: true; invoice: SubscriptionInvoice }
   | { method: 'gateway'; checkoutUrl: string; reference: string; provider: string };
 
-export function useSubscriptionStatus() {
+export function useSubscriptionStatus(enabled = true) {
   return useQuery({
     queryKey: ['subscription', 'status'],
     queryFn: async () => {
       const res = await api.get('/subscription');
       return res.data.data as SubscriptionStatus;
     },
+    enabled,
   });
 }
 

@@ -20,9 +20,12 @@ import { Badge } from '../components/ui/badge';
 import { VerificationBanner } from '../components/verification-banner';
 import { formatCurrency, formatDate } from '../lib/utils';
 import { useAuth } from '../hooks/use-auth';
+import { useSubscriptionStatus } from '../hooks/queries/use-subscription';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const isOwner = !!user?.roles?.includes('business_owner');
+  const { data: subscription } = useSubscriptionStatus(isOwner);
   const { data: dashboard, isLoading } = useDashboard();
   const { data: payments, isLoading: paymentsLoading } = usePayments(undefined, 'pending');
   const { isSchool, terms } = useBusinessType();
@@ -57,6 +60,29 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 page-enter">
       <VerificationBanner />
+
+      {isOwner && subscription && subscription.phase !== 'active' && (
+        <Link
+          to="/subscription"
+          className={`flex items-start justify-between gap-4 rounded-xl border p-4 ${subscription.phase === 'suspended' ? 'border-red-300 bg-red-50 dark:border-red-900 dark:bg-red-950/40' : 'border-amber-300 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/40'}`}
+        >
+          <div>
+            <p className={`text-sm font-bold ${subscription.phase === 'suspended' ? 'text-red-700 dark:text-red-300' : 'text-amber-700 dark:text-amber-300'}`}>
+              {subscription.phase === 'trial'
+                ? `Trial ends in ${subscription.trialDaysRemaining ?? 0} day${subscription.trialDaysRemaining === 1 ? '' : 's'}`
+                : subscription.phase === 'notice'
+                  ? `${subscription.noticeDaysRemaining ?? 0} day${subscription.noticeDaysRemaining === 1 ? '' : 's'} left to subscribe`
+                  : 'Organization account suspended'}
+            </p>
+            <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+              {subscription.phase === 'suspended'
+                ? 'Scanning, grading, and organization features are paused. Renew to restore access.'
+                : 'Choose quarterly or yearly billing to keep uninterrupted access.'}
+            </p>
+          </div>
+          <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">Manage subscription →</span>
+        </Link>
+      )}
 
       {/* Page heading */}
       <div className="flex items-center justify-between animate-slide-down">

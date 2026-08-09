@@ -9,6 +9,7 @@ import { ActivityForm } from './activity-form';
 import { ClassLevelForm } from './class-level-form';
 import { formatCurrency } from '../../lib/utils';
 import type { Activity } from '../../types';
+import { useBusinessType } from '../../hooks/use-business-type';
 
 export default function ActivitiesPage() {
   const { data: activities, isLoading } = useActivities();
@@ -17,15 +18,16 @@ export default function ActivitiesPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Activity | null>(null);
   const [classLevelFor, setClassLevelFor] = useState<string | null>(null);
+  const { terms } = useBusinessType();
 
   if (isLoading) return <Loading />;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Activities</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{terms.activities}</h1>
         <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
-          <Plus size={16} className="mr-2" /> Add Activity
+          <Plus size={16} className="mr-2" /> Add {terms.activity}
         </Button>
       </div>
 
@@ -45,7 +47,7 @@ export default function ActivitiesPage() {
 
               {activity.classLevels?.length ? (
                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700">
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase mb-2">Class Levels</p>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase mb-2">{terms.classLevels}</p>
                   <div className="flex flex-wrap gap-2">
                     {activity.classLevels.map((cl) => (
                       <span key={cl.id} className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full px-3 py-1 text-xs">
@@ -59,7 +61,7 @@ export default function ActivitiesPage() {
 
               <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-700">
                 <Button size="sm" variant="secondary" onClick={() => { setEditing(activity); setFormOpen(true); }}><Pencil size={14} className="mr-1" /> Edit</Button>
-                <Button size="sm" variant="secondary" onClick={() => setClassLevelFor(activity.id)}><Layers size={14} className="mr-1" /> Add Level</Button>
+                <Button size="sm" variant="secondary" onClick={() => setClassLevelFor(activity.id)}><Layers size={14} className="mr-1" /> Add {terms.classLevel}</Button>
                 <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700" onClick={() => { if (confirm('Delete?')) deleteActivity.mutate(activity.id); }}><Trash2 size={14} /></Button>
               </div>
             </CardContent>
@@ -67,7 +69,7 @@ export default function ActivitiesPage() {
         ))}
       </div>
 
-      {!activities?.length && <p className="text-center py-12 text-slate-500 dark:text-slate-400">No activities yet.</p>}
+      {!activities?.length && <p className="text-center py-12 text-slate-500 dark:text-slate-400">No {terms.activities.toLowerCase()} yet.</p>}
 
       <ActivityForm open={formOpen} onClose={() => setFormOpen(false)} activity={editing} />
       {classLevelFor && <ClassLevelForm open={!!classLevelFor} onClose={() => setClassLevelFor(null)} activityId={classLevelFor} />}

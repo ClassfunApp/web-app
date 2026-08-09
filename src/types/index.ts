@@ -120,6 +120,7 @@ export interface Activity {
   startTime: string | null;
   endTime: string | null;
   schedule: Record<string, unknown> | null;
+  teacherIds: string[];
   isActive: boolean;
   center?: Center;
   classLevels?: ClassLevel[];
@@ -259,6 +260,7 @@ export interface Grade {
   tenantId: string;
   childId: string;
   enrollmentId: string;
+  classLevelId: string | null;
   gradedBy: string;
   period: string;
   score: number | null;
@@ -269,8 +271,28 @@ export interface Grade {
   isPublished: boolean;
   child?: { id: string; fullName: string; photoUrl: string | null };
   enrollment?: { id: string; activity?: { id: string; name: string } };
+  classLevel?: { id: string; name: string } | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AttendanceRosterRow {
+  enrollmentId: string;
+  childId: string;
+  childName: string;
+  childPhotoUrl: string | null;
+  activityId: string;
+  activityName: string;
+  centerId: string;
+  centerName: string;
+  classLevelId: string | null;
+  classLevelName: string | null;
+  attendanceId: string | null;
+  date: string;
+  signedInAt: string | null;
+  signedOutAt: string | null;
+  method: AttendanceMethod | null;
+  status: 'present' | 'checked_out' | 'absent';
 }
 
 export type WithdrawalStatus = 'pending' | 'processing' | 'success' | 'failed' | 'reversed';

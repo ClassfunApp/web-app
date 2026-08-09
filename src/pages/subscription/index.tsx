@@ -29,12 +29,14 @@ export default function SubscriptionPage() {
   const [methodPickerOpen, setMethodPickerOpen] = useState(false);
 
   const providerLabel = status?.paymentProvider === 'flutterwave' ? 'Flutterwave' : 'Paystack';
-  const outstandingAmount = status?.outstandingInvoice?.amount ?? 0;
-  const outstandingCurrency = status?.outstandingInvoice?.currency ?? '';
+  const phase = status?.phase ?? status?.status ?? 'trial';
+  const selectedAmount = status?.plan === 'annual' ? status?.annualAmount ?? 0 : status?.quarterlyAmount ?? 0;
+  const outstandingAmount = status?.outstandingInvoice?.amount ?? selectedAmount;
+  const outstandingCurrency = status?.outstandingInvoice?.currency ?? status?.billingCurrency ?? '';
   const walletBalance = status?.wallet?.balance ?? 0;
   const walletCurrency = status?.wallet?.currency ?? '';
   const walletCanPay =
-    !!status?.outstandingInvoice &&
+    outstandingAmount > 0 &&
     walletCurrency === outstandingCurrency &&
     walletBalance >= outstandingAmount;
 
@@ -56,12 +58,17 @@ export default function SubscriptionPage() {
     }
   }
 
-  async function handleTogglePlan() {
-    const nextPlan = status?.plan === 'quarterly' ? 'annual' : 'quarterly';
-    await changePlan.mutateAsync(nextPlan);
+  async function handleSelectPlan(nextPlan: 'quarterly' | 'annual') {
+    if (!status || status.plan === nextPlan) return;
+    try {
+      await changePlan.mutateAsync(nextPlan);
+    } catch (err) {
+      alert((err as Error).message);
+    }
   }
 
-  const daysLeft = trialDaysLeft(status?.trialEndsAt ?? null);
+  const daysLeft = status?.trialDaysRemaining ?? trialDaysLeft(status?.trialEndsAt ?? null);
+  const needsPayment = phase !== 'active' || !!status?.outstandingInvoice;
 
   const invoiceColumns = [
     { key: 'period', header: 'Period', render: (inv: SubscriptionInvoice) => inv.billingPeriod },
@@ -114,33 +121,47 @@ export default function SubscriptionPage() {
           <div className="space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
               <Badge status={status?.plan ?? 'quarterly'} label={(status?.plan ?? 'quarterly').toUpperCase()} />
-              <Badge status={status?.status ?? 'trial'} label={(status?.status ?? 'trial').toUpperCase()} />
+              <Badge status={phase === 'notice' ? 'overdue' : phase} label={(phase === 'notice' ? 'RENEWAL DUE' : phase).toUpperCase()} />
             </div>
 
-            {status?.status === 'trial' && daysLeft !== null && (
-              <p className="text-sm text-amber-600 dark:text-amber-400 font-medium">
-                {daysLeft} day{daysLeft !== 1 ? 's' : ''} left in your trial
-              </p>
+            {phase !== 'active' && (
+              <div className={`rounded-xl border p-3 text-sm ${phase === 'suspended' ? 'border-red-300 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300' : 'border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300'}`}>
+                <p className="font-semibold">
+                  {phase === 'trial' && daysLeft !== null
+                    ? `Trial ends in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}`
+                    : phase === 'notice'
+                      ? `${status?.noticeDaysRemaining ?? 0} day${status?.noticeDaysRemaining === 1 ? '' : 's'} left to subscribe`
+                      : 'Organization account suspended'}
+                </p>
+                <p className="mt-1 text-xs opacity-90">
+                  {phase === 'suspended'
+                    ? 'Scanning, grading, reports, and other organization features are paused until payment succeeds.'
+                    : 'Choose quarterly or yearly billing to keep uninterrupted access. A 14-day renewal window follows the trial.'}
+                </p>
+              </div>
             )}
 
-            {status?.plan === 'quarterly' && (
-              <button
-                onClick={handleTogglePlan}
-                disabled={changePlan.isPending}
-                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline disabled:opacity-50"
-              >
-                Upgrade to Annual — save vs quarterly
-              </button>
-            )}
-            {status?.plan === 'annual' && (
-              <button
-                onClick={handleTogglePlan}
-                disabled={changePlan.isPending}
-                className="text-sm text-slate-500 dark:text-slate-400 hover:underline disabled:opacity-50"
-              >
-                Switch to Quarterly
-              </button>
-            )}
+            <div className="grid grid-cols-2 gap-2">
+              {(['quarterly', 'annual'] as const).map((plan) => {
+                const selected = status?.plan === plan;
+                const amount = plan === 'annual' ? status?.annualAmount ?? 0 : status?.quarterlyAmount ?? 0;
+                return (
+                  <button
+                    key={plan}
+                    onClick={() => handleSelectPlan(plan)}
+                    disabled={changePlan.isPending}
+                    className={`rounded-xl border-2 p-3 text-left transition-colors disabled:opacity-50 ${selected ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40' : 'border-slate-200 dark:border-slate-700'}`}
+                  >
+                    <span className="block text-sm font-semibold text-slate-800 dark:text-slate-100">
+                      {plan === 'annual' ? 'Yearly' : 'Quarterly'} {selected ? '✓' : ''}
+                    </span>
+                    <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">
+                      {formatCurrency(amount, status?.billingCurrency)} {plan === 'annual' ? '/ year' : '/ quarter'}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right side */}
@@ -153,13 +174,13 @@ export default function SubscriptionPage() {
                 {formatCurrency(status?.annualAmount ?? 0, status?.billingCurrency)} / year
               </p>
             </div>
-            {status?.outstandingInvoice && (
+            {needsPayment && (
               <Button
                 onClick={handlePayNow}
-                disabled={payMutation.isPending}
+                disabled={payMutation.isPending || changePlan.isPending}
               >
                 <CreditCard size={16} className="mr-2" />
-                {payMutation.isPending ? 'Redirecting...' : 'Pay Now'}
+                {changePlan.isPending ? 'Updating plan...' : payMutation.isPending ? 'Redirecting...' : phase === 'suspended' ? 'Renew & Restore Access' : 'Subscribe Now'}
               </Button>
             )}
           </div>

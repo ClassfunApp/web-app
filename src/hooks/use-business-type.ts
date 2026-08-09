@@ -18,12 +18,12 @@ export function useBusinessType() {
     // Terminology helpers
     terms: {
       // Singular / plural for the main programme unit
-      activity: isSchool ? 'Classroom' : 'Activity',
-      activities: isSchool ? 'Classrooms' : 'Activities',
+      activity: isSchool ? 'Class' : 'Activity',
+      activities: isSchool ? 'Classes' : 'Activities',
 
       // Sub-level within a programme
-      classLevel: isSchool ? 'Subject' : 'Class Level',
-      classLevels: isSchool ? 'Subjects' : 'Class Levels',
+      classLevel: isSchool ? 'Subject' : 'Level',
+      classLevels: isSchool ? 'Subjects' : 'Levels',
 
       // Locations
       center: isSchool ? 'Campus' : 'Center',

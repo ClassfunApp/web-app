@@ -3,6 +3,8 @@ import { GraduationCap, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useGrades, useCreateGrade, useUpdateGrade, usePublishGrade, useUnpublishGrade, useDeleteGrade } from '../../hooks/queries/use-grades';
 import { useChildren } from '../../hooks/queries/use-children';
 import { useEnrollments } from '../../hooks/queries/use-enrollments';
+import { useActivities } from '../../hooks/queries/use-activities';
+import { useBusinessType } from '../../hooks/use-business-type';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -43,11 +45,14 @@ function GradeModal({
   const { data: children = [] } = useChildren('active');
   const [childId, setChildId] = useState(editing?.childId ?? '');
   const { data: enrollments = [] } = useEnrollments(childId || undefined);
+  const { data: activities = [] } = useActivities();
+  const { terms } = useBusinessType();
 
   const createMutation = useCreateGrade();
   const updateMutation = useUpdateGrade();
 
   const [enrollmentId, setEnrollmentId] = useState(editing?.enrollmentId ?? '');
+  const [classLevelId, setClassLevelId] = useState(editing?.classLevelId ?? '');
   const [period, setPeriod]             = useState(editing?.period ?? '');
   const [score, setScore]               = useState(editing?.score?.toString() ?? '');
   const [maxScore, setMaxScore]         = useState(editing?.maxScore?.toString() ?? '100');
@@ -56,7 +61,7 @@ function GradeModal({
   const [error, setError]               = useState('');
 
   function reset() {
-    setChildId(''); setEnrollmentId(''); setPeriod('');
+    setChildId(''); setEnrollmentId(''); setClassLevelId(''); setPeriod('');
     setScore(''); setMaxScore('100'); setLetterGrade(''); setComments(''); setError('');
   }
 
@@ -82,6 +87,7 @@ function GradeModal({
       } else {
         await createMutation.mutateAsync({
           enrollmentId,
+          classLevelId: classLevelId || null,
           period,
           score: scoreNum,
           maxScore: maxScoreNum,
@@ -97,6 +103,8 @@ function GradeModal({
   }
 
   const isPending = createMutation.isPending || updateMutation.isPending;
+  const selectedEnrollment = enrollments.find((enrollment) => enrollment.id === enrollmentId);
+  const classLevels = activities.find((activity) => activity.id === selectedEnrollment?.activityId)?.classLevels ?? [];
 
   return (
     <Modal open={open} onClose={() => { reset(); onClose(); }} title={editing ? 'Edit Grade' : 'New Grade'} size="lg">
@@ -106,19 +114,28 @@ function GradeModal({
             <Select
               label="Student"
               value={childId}
-              onChange={(e) => { setChildId(e.target.value); setEnrollmentId(''); }}
+              onChange={(e) => { setChildId(e.target.value); setEnrollmentId(''); setClassLevelId(''); }}
               options={[
                 { value: '', label: 'Select a student…' },
                 ...children.map((c) => ({ value: c.id, label: c.fullName })),
               ]}
             />
             <Select
-              label="Activity / Enrollment"
+              label={`${terms.activity} / Enrollment`}
               value={enrollmentId}
-              onChange={(e) => setEnrollmentId(e.target.value)}
+              onChange={(e) => { setEnrollmentId(e.target.value); setClassLevelId(''); }}
               options={[
                 { value: '', label: childId ? 'Select an activity…' : 'Select a student first' },
                 ...enrollments.map((e) => ({ value: e.id, label: e.activity?.name ?? e.id })),
+              ]}
+            />
+            <Select
+              label={terms.classLevel}
+              value={classLevelId}
+              onChange={(e) => setClassLevelId(e.target.value)}
+              options={[
+                { value: '', label: classLevels.length ? `Select ${terms.classLevel.toLowerCase()}…` : `General ${terms.activity.toLowerCase()} grade` },
+                ...classLevels.map((level) => ({ value: level.id, label: level.name })),
               ]}
             />
           </>

@@ -6,6 +6,7 @@ interface GradeFilters {
   childId?: string;
   enrollmentId?: string;
   activityId?: string;
+  classLevelId?: string;
   period?: string;
   isPublished?: boolean;
   limit?: number;
@@ -38,6 +39,7 @@ export function useCreateGrade() {
   return useMutation({
     mutationFn: async (dto: {
       enrollmentId: string;
+      classLevelId?: string | null;
       period: string;
       score?: number;
       maxScore?: number;
@@ -57,6 +59,7 @@ export function useUpdateGrade() {
     mutationFn: async ({ id, ...dto }: {
       id: string;
       period?: string;
+      classLevelId?: string | null;
       score?: number;
       maxScore?: number;
       letterGrade?: string;

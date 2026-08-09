@@ -1,6 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../../lib/api';
-import type { Attendance } from '../../types';
+import type { Attendance, AttendanceRosterRow } from '../../types';
+
+export function useAttendanceRoster(filters: { centerId?: string; activityId?: string; date: string }) {
+  return useQuery({
+    queryKey: ['attendance-roster', filters],
+    queryFn: async () => {
+      const res = await api.get('/attendance/roster', { params: filters });
+      return res.data.data as AttendanceRosterRow[];
+    },
+  });
+}
 
 export function useAttendance(filters: { centerId?: string; date?: string; childId?: string }) {
   return useQuery({
