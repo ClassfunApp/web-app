@@ -16,7 +16,7 @@ export interface SubscriptionInvoice {
   createdAt: string;
 }
 
-export type SubscriptionPlan = 'quarterly' | 'annual';
+export type SubscriptionPlan = 'monthly' | 'quarterly' | 'annual';
 
 export interface SubscriptionStatus {
   plan: SubscriptionPlan;
@@ -31,6 +31,7 @@ export interface SubscriptionStatus {
   childCount: number;
   billingRegion: string;
   billingCurrency: string;
+  monthlyAmount: number;
   quarterlyAmount: number;
   annualAmount: number;
   currentCycle: { start: string; end: string; period: string } | null;

@@ -30,7 +30,11 @@ export default function SubscriptionPage() {
 
   const providerLabel = status?.paymentProvider === 'flutterwave' ? 'Flutterwave' : 'Paystack';
   const phase = status?.phase ?? status?.status ?? 'trial';
-  const selectedAmount = status?.plan === 'annual' ? status?.annualAmount ?? 0 : status?.quarterlyAmount ?? 0;
+  const selectedAmount = status?.plan === 'annual'
+    ? status.annualAmount ?? 0
+    : status?.plan === 'quarterly'
+      ? status.quarterlyAmount ?? 0
+      : status?.monthlyAmount ?? 0;
   const outstandingAmount = status?.outstandingInvoice?.amount ?? selectedAmount;
   const outstandingCurrency = status?.outstandingInvoice?.currency ?? status?.billingCurrency ?? '';
   const walletBalance = status?.wallet?.balance ?? 0;
@@ -58,7 +62,7 @@ export default function SubscriptionPage() {
     }
   }
 
-  async function handleSelectPlan(nextPlan: 'quarterly' | 'annual') {
+  async function handleSelectPlan(nextPlan: 'monthly' | 'annual') {
     if (!status || status.plan === nextPlan) return;
     try {
       await changePlan.mutateAsync(nextPlan);
@@ -120,7 +124,7 @@ export default function SubscriptionPage() {
           {/* Left side */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge status={status?.plan ?? 'quarterly'} label={(status?.plan ?? 'quarterly').toUpperCase()} />
+              <Badge status={status?.plan ?? 'monthly'} label={(status?.plan ?? 'monthly').toUpperCase()} />
               <Badge status={phase === 'notice' ? 'overdue' : phase} label={(phase === 'notice' ? 'RENEWAL DUE' : phase).toUpperCase()} />
             </div>
 
@@ -136,15 +140,15 @@ export default function SubscriptionPage() {
                 <p className="mt-1 text-xs opacity-90">
                   {phase === 'suspended'
                     ? 'Scanning, grading, reports, and other organization features are paused until payment succeeds.'
-                    : 'Choose quarterly or yearly billing to keep uninterrupted access. A 14-day renewal window follows the trial.'}
+                    : 'Choose monthly or yearly billing to keep uninterrupted access. A 14-day renewal window follows the trial.'}
                 </p>
               </div>
             )}
 
             <div className="grid grid-cols-2 gap-2">
-              {(['quarterly', 'annual'] as const).map((plan) => {
+              {(['monthly', 'annual'] as const).map((plan) => {
                 const selected = status?.plan === plan;
-                const amount = plan === 'annual' ? status?.annualAmount ?? 0 : status?.quarterlyAmount ?? 0;
+                const amount = plan === 'annual' ? status?.annualAmount ?? 0 : status?.monthlyAmount ?? 0;
                 return (
                   <button
                     key={plan}
@@ -153,10 +157,10 @@ export default function SubscriptionPage() {
                     className={`rounded-xl border-2 p-3 text-left transition-colors disabled:opacity-50 ${selected ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40' : 'border-slate-200 dark:border-slate-700'}`}
                   >
                     <span className="block text-sm font-semibold text-slate-800 dark:text-slate-100">
-                      {plan === 'annual' ? 'Yearly' : 'Quarterly'} {selected ? '✓' : ''}
+                      {plan === 'annual' ? 'Yearly' : 'Monthly'} {selected ? '✓' : ''}
                     </span>
                     <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">
-                      {formatCurrency(amount, status?.billingCurrency)} {plan === 'annual' ? '/ year' : '/ quarter'}
+                      {formatCurrency(amount, status?.billingCurrency)} {plan === 'annual' ? '/ year' : '/ month'}
                     </span>
                   </button>
                 );
@@ -168,7 +172,7 @@ export default function SubscriptionPage() {
           <div className="flex flex-col items-start sm:items-end gap-3">
             <div className="text-right">
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                {formatCurrency(status?.quarterlyAmount ?? 0, status?.billingCurrency)} / quarter
+                {formatCurrency(selectedAmount, status?.billingCurrency)} {status?.plan === 'annual' ? '/ year' : status?.plan === 'quarterly' ? '/ quarter' : '/ month'}
               </p>
               <p className="text-xs text-slate-400 dark:text-slate-500">
                 {formatCurrency(status?.annualAmount ?? 0, status?.billingCurrency)} / year
@@ -197,8 +201,8 @@ export default function SubscriptionPage() {
           iconColor="text-indigo-600 dark:text-indigo-400"
         />
         <StatCard
-          title="Quarterly Cost"
-          value={formatCurrency(status?.quarterlyAmount ?? 0, status?.billingCurrency)}
+          title="Monthly Cost"
+          value={formatCurrency(status?.monthlyAmount ?? 0, status?.billingCurrency)}
           icon={<CreditCard size={20} />}
           iconBg="bg-emerald-100 dark:bg-emerald-950"
           iconColor="text-emerald-600 dark:text-emerald-400"

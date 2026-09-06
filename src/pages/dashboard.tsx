@@ -77,7 +77,7 @@ export default function DashboardPage() {
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
               {subscription.phase === 'suspended'
                 ? 'Scanning, grading, and organization features are paused. Renew to restore access.'
-                : 'Choose quarterly or yearly billing to keep uninterrupted access.'}
+                : 'Choose monthly or yearly billing to keep uninterrupted access.'}
             </p>
           </div>
           <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">Manage subscription →</span>

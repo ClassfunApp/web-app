@@ -135,7 +135,7 @@ export default function StaffPage() {
 
   /** Only staff and teachers can have per-center permissions; owners/managers are always permitted. */
   const canManagePermissions = (u: User) =>
-    u.role === 'staff' || u.role === 'teacher';
+    (u.roles ?? [u.role]).some((role) => role === 'staff' || role === 'teacher');
 
   const columns = [
     { key: 'fullName', header: 'Name',  render: (u: User) => u.fullName },
@@ -143,11 +143,13 @@ export default function StaffPage() {
     { key: 'phone',    header: 'Phone', render: (u: User) => u.phone || '—' },
     {
       key: 'role',
-      header: 'Role',
+      header: 'Roles',
       render: (u: User) => (
-        <Badge status={ROLE_STATUS[u.role] ?? 'pending'}>
-          {u.role.replace('_', ' ')}
-        </Badge>
+        <div className="flex gap-1 flex-wrap">
+          {(u.roles ?? [u.role]).filter(Boolean).map((role) => (
+            <Badge key={role} status={ROLE_STATUS[role] ?? 'pending'}>{role.replaceAll('_', ' ')}</Badge>
+          ))}
+        </div>
       ),
     },
     {

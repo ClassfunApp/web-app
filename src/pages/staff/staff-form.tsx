@@ -17,6 +17,7 @@ const ROLES = [
   { value: 'staff', label: 'Staff' },
   { value: 'teacher', label: 'Teacher' },
   { value: 'manager', label: 'Manager' },
+  { value: 'parent', label: 'Parent' },
 ];
 
 export function StaffForm({ open, onClose, editing }: StaffFormProps) {
@@ -29,7 +30,7 @@ export function StaffForm({ open, onClose, editing }: StaffFormProps) {
     email: '',
     password: '',
     phone: '',
-    role: 'staff',
+    roles: ['staff'],
     centerId: '',
   });
 
@@ -40,11 +41,11 @@ export function StaffForm({ open, onClose, editing }: StaffFormProps) {
         email: editing.email,
         password: '',
         phone: editing.phone || '',
-        role: editing.role,
+        roles: editing.roles?.length ? editing.roles : [editing.role || 'staff'],
         centerId: editing.centerId || '',
       });
     } else {
-      setForm({ fullName: '', email: '', password: '', phone: '', role: 'staff', centerId: '' });
+      setForm({ fullName: '', email: '', password: '', phone: '', roles: ['staff'], centerId: '' });
     }
   }, [editing, open]);
 
@@ -57,7 +58,7 @@ export function StaffForm({ open, onClose, editing }: StaffFormProps) {
         id: editing.id,
         fullName: form.fullName,
         phone: form.phone || undefined,
-        role: form.role,
+        roles: form.roles,
         centerId: centerId ?? null,
       });
     } else {
@@ -66,14 +67,14 @@ export function StaffForm({ open, onClose, editing }: StaffFormProps) {
         email: form.email,
         password: form.password,
         phone: form.phone || undefined,
-        role: form.role,
+        roles: form.roles,
         centerId,
       });
     }
     onClose();
   };
 
-  const isManager = form.role === 'manager';
+  const isManager = form.roles.includes('manager');
   const showCenterSelect = centers.length > 0;
 
   return (
@@ -109,12 +110,21 @@ export function StaffForm({ open, onClose, editing }: StaffFormProps) {
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
         />
-        <Select
-          label="Role"
-          value={form.role}
-          onChange={(e) => setForm({ ...form, role: e.target.value })}
-          options={ROLES}
-        />
+        <fieldset>
+          <legend className="text-sm font-medium mb-2">Roles (choose up to 2)</legend>
+          <div className="flex flex-wrap gap-4">
+            {ROLES.map(({ value, label }) => (
+              <label key={value} className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={form.roles.includes(value)}
+                  disabled={!form.roles.includes(value) && form.roles.length >= 2}
+                  onChange={() => setForm((current) => ({ ...current, roles: current.roles.includes(value)
+                    ? current.roles.length > 1 ? current.roles.filter((role) => role !== value) : current.roles
+                    : [...current.roles, value] }))} />
+                {label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
         {showCenterSelect && (
           <Select
             label={isManager ? 'Assigned Center *' : 'Assigned Center'}
