@@ -7,6 +7,7 @@ import { Badge } from '../../components/ui/badge';
 import { Loading } from '../../components/ui/loading';
 import { Modal } from '../../components/ui/modal';
 import { CenterForm } from './center-form';
+import { QrPrintout } from './qr-printout';
 import type { Center } from '../../types';
 
 export default function CentersPage() {
@@ -18,6 +19,8 @@ export default function CentersPage() {
   const [editing, setEditing] = useState<Center | null>(null);
   const [qrModal, setQrModal] = useState<{ url: string; name: string } | null>(null);
 
+  const [qrError, setQrError] = useState<string | null>(null);
+
   if (isLoading) return <Loading />;
 
   return (
@@ -28,6 +31,8 @@ export default function CentersPage() {
           <Plus size={16} className="mr-2" /> Add Center
         </Button>
       </div>
+
+      {qrError && <p role="alert" className="text-sm text-red-600">{qrError}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {centers?.map((center) => (
@@ -48,12 +53,22 @@ export default function CentersPage() {
                 <Button
                   size="sm"
                   variant="secondary"
+                  disabled={generateQr.isPending}
                   onClick={async () => {
-                    const res = await generateQr.mutateAsync(center.id);
-                    setQrModal({ url: res.qrCodeUrl, name: center.name });
+                    setQrError(null);
+                    if (center.qrCodeUrl) {
+                      setQrModal({ url: center.qrCodeUrl, name: center.name });
+                      return;
+                    }
+                    try {
+                      const res = await generateQr.mutateAsync(center.id);
+                      setQrModal({ url: res.qrCodeUrl, name: center.name });
+                    } catch {
+                      setQrError('Could not generate the QR code. Please try again.');
+                    }
                   }}
                 >
-                  <QrCode size={14} className="mr-1" /> QR Code
+                  <QrCode size={14} className="mr-1" /> {center.qrCodeUrl ? 'View QR' : 'Generate QR'}
                 </Button>
                 <Button
                   size="sm"
@@ -93,10 +108,7 @@ export default function CentersPage() {
 
       <Modal open={!!qrModal} onClose={() => setQrModal(null)} title={`QR Code - ${qrModal?.name}`}>
         {qrModal && (
-          <div className="text-center py-4">
-            <img src={qrModal.url} alt="QR Code" className="mx-auto w-64 h-64" />
-            <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">Display this QR code at your center entrance for parents to scan.</p>
-          </div>
+          <QrPrintout key={qrModal.url + qrModal.name} url={qrModal.url} name={qrModal.name} />
         )}
       </Modal>
     </div>
