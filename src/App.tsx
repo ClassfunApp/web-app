@@ -36,6 +36,7 @@ import EnrollPage from './pages/enroll/index';
 import BrandingPage from './pages/settings/branding';
 import ChildLifecyclePage from './pages/settings/child-lifecycle';
 import SubscriptionPage from './pages/subscription/index';
+import TimetablePage from './pages/timetable/index';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -97,6 +98,7 @@ export default function App() {
               <Route path="wallet" element={<WalletPage />} />
               <Route path="reports" element={<ReportsPage />} />
               <Route path="grades" element={<GradesPage />} />
+              <Route path="timetable" element={<TimetablePage />} />
               <Route path="permissions" element={<PermissionsPage />} />
               <Route path="settings/branding" element={<BrandingPage />} />
               <Route path="settings/child-lifecycle" element={<ChildLifecyclePage />} />

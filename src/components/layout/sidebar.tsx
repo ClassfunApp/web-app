@@ -23,6 +23,7 @@ import {
   FileText,
   GraduationCap,
   Inbox,
+  CalendarDays,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -99,6 +100,7 @@ export function Sidebar() {
     { to: "/children", icon: Baby, label: isSchool ? "Students" : "Children" },
     { to: "/families", icon: UsersRound, label: "Families" },
     { to: "/activities", icon: Dumbbell, label: terms.activities },
+    { to: "/timetable", icon: CalendarDays, label: "Timetable" },
     { to: "/enrollments", icon: ClipboardList, label: "Enrollments" },
     { to: "/enrolment-requests", icon: Inbox, label: "Enrolment Requests" },
     { to: "/attendance", icon: CalendarCheck, label: "Attendance" },

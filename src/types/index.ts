@@ -446,3 +446,11 @@ export interface DashboardStats {
     totalStaff: number;
   };
 }
+
+export interface TimetableEntry {
+  id: string; tenantId: string; centerId: string; activityId: string;
+  classLevelId: string | null; teacherId: string | null; dayOfWeek: number;
+  startTime: string; endTime: string; room: string | null; notes: string | null;
+  center?: Center; activity?: Activity; classLevel?: ClassLevel | null;
+  teacher?: Pick<User, 'id' | 'fullName'> | null; createdAt: string; updatedAt: string;
+}
