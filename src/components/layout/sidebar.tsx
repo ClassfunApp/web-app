@@ -109,7 +109,6 @@ export function Sidebar() {
     { to: "/reports", icon: FileText, label: "Reports" },
     { to: "/grades", icon: GraduationCap, label: "Grades" },
     { to: "/settings/branding", icon: Settings, label: "Settings" },
-    { to: "/settings/child-lifecycle", icon: Settings, label: "Child Lifecycle" },
   ];
 
   const ownerNav = [

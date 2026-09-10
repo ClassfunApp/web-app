@@ -34,7 +34,6 @@ import GradesPage from './pages/grades/index';
 import PermissionsPage from './pages/permissions/index';
 import EnrollPage from './pages/enroll/index';
 import BrandingPage from './pages/settings/branding';
-import ChildLifecyclePage from './pages/settings/child-lifecycle';
 import SubscriptionPage from './pages/subscription/index';
 import TimetablePage from './pages/timetable/index';
 
@@ -101,7 +100,6 @@ export default function App() {
               <Route path="timetable" element={<TimetablePage />} />
               <Route path="permissions" element={<PermissionsPage />} />
               <Route path="settings/branding" element={<BrandingPage />} />
-              <Route path="settings/child-lifecycle" element={<ChildLifecyclePage />} />
               <Route path="subscription" element={<SubscriptionPage />} />
             </Route>
 
