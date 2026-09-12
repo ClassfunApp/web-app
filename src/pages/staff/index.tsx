@@ -22,7 +22,7 @@ const ROLE_STATUS: Record<string, string> = {
   staff:          'pending',
 };
 
-const PERMISSION_LABELS: Record<StaffPermissionType, { label: string; description: string }> = {
+const PERMISSION_LABELS: Record<'validate_pickup' | 'show_center_qr', { label: string; description: string }> = {
   validate_pickup: {
     label:       'Validate Pickup Codes',
     description: 'Allow this staff member to validate 7-digit pickup codes from parents.',
@@ -33,7 +33,7 @@ const PERMISSION_LABELS: Record<StaffPermissionType, { label: string; descriptio
   },
 };
 
-const ALL_PERMISSIONS: StaffPermissionType[] = ['validate_pickup', 'show_center_qr'];
+const ALL_PERMISSIONS: ('validate_pickup' | 'show_center_qr')[] = ['validate_pickup', 'show_center_qr'];
 
 // ── Permissions modal ─────────────────────────────────────────────────────────
 

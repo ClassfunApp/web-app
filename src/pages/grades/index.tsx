@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { GraduationCap, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useGrades, useCreateGrade, useUpdateGrade, usePublishGrade, useUnpublishGrade, useDeleteGrade } from '../../hooks/queries/use-grades';
 import { useChildren } from '../../hooks/queries/use-children';
@@ -225,6 +226,7 @@ function GradeRow({ grade }: { grade: Grade }) {
         {/* Period */}
         <td className="py-3 px-4">
           <span className="text-sm text-slate-700 dark:text-slate-300">{grade.period}</span>
+          {grade.cbtResultId && <Link to="/cbt-grading" className="block text-xs text-indigo-600 dark:text-indigo-300 mt-1">Manage in CBT grading</Link>}
         </td>
 
         {/* Score */}
@@ -278,7 +280,7 @@ function GradeRow({ grade }: { grade: Grade }) {
             {grade.isPublished ? (
               <button
                 onClick={() => unpublishMutation.mutate(grade.id)}
-                disabled={unpublishMutation.isPending}
+                disabled={unpublishMutation.isPending || !!grade.cbtResultId}
                 className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-950/50 hover:text-amber-600 dark:hover:text-amber-400 transition-colors disabled:opacity-50"
               >
                 <EyeOff size={11} />Unpublish
@@ -286,7 +288,7 @@ function GradeRow({ grade }: { grade: Grade }) {
             ) : (
               <button
                 onClick={() => publishMutation.mutate(grade.id)}
-                disabled={publishMutation.isPending}
+                disabled={publishMutation.isPending || !!grade.cbtResultId}
                 className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors disabled:opacity-50"
               >
                 <Eye size={11} />Publish
@@ -294,6 +296,7 @@ function GradeRow({ grade }: { grade: Grade }) {
             )}
             {!grade.isPublished && (
               <button
+                disabled={!!grade.cbtResultId}
                 onClick={() => setEditing(true)}
                 className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
               >
@@ -302,6 +305,7 @@ function GradeRow({ grade }: { grade: Grade }) {
             )}
             {!grade.isPublished && (
               <button
+                disabled={!!grade.cbtResultId}
                 onClick={() => { if (confirm('Delete this grade?')) deleteMutation.mutate(grade.id); }}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors"
               >

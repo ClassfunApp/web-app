@@ -107,6 +107,9 @@ export function Sidebar() {
     { to: "/payments", icon: CreditCard, label: "Payments" },
     { to: "/wallet", icon: Wallet, label: "Wallet" },
     { to: "/reports", icon: FileText, label: "Reports" },
+    ...(isSchool ? [{ to: "/cbt-grading", icon: GraduationCap, label: "CBT grading" }] : []),
+    ...(isSchool ? [{ to: "/cbt-authoring", icon: GraduationCap, label: "CBT authoring" }] : []),
+    ...(isSchool ? [{ to: "/cbt-operations", icon: ClipboardList, label: "Exam control room" }] : []),
     { to: "/grades", icon: GraduationCap, label: "Grades" },
     { to: "/settings/branding", icon: Settings, label: "Settings" },
   ];

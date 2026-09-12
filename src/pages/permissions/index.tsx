@@ -1,3 +1,4 @@
+import { useBusinessType } from '../../hooks/use-business-type';
 import { useState, useMemo } from 'react';
 import { ShieldCheck, ShieldOff, Key, QrCode } from 'lucide-react';
 import { useAuth } from '../../hooks/use-auth';
@@ -19,6 +20,12 @@ const PERMISSION_DEFS: {
   description: string;
   Icon: typeof Key;
 }[] = [
+  { key: 'cbt_author', label: 'CBT authoring', short: 'Author', description: 'Create subject questions and exams.', Icon: Key },
+  { key: 'cbt_approve', label: 'CBT approval', short: 'Approve', description: 'Approve questions and exams. Owner grant required.', Icon: Key },
+  { key: 'cbt_schedule', label: 'CBT scheduling', short: 'Schedule', description: 'Schedule exams and issue access. Owner grant required.', Icon: Key },
+  { key: 'cbt_grade', label: 'CBT grading', short: 'Grade', description: 'Mark assigned-subject papers.', Icon: Key },
+  { key: 'cbt_release', label: 'CBT release', short: 'Release', description: 'Finalise, override and release results. Owner grant required.', Icon: Key },
+  { key: 'cbt_operate', label: 'CBT operations', short: 'Operate', description: 'Manage sittings, incidents and live attempt interventions. Owner grant required.', Icon: Key },
   {
     key:         'validate_pickup',
     label:       'Validate Pickup Codes',
@@ -35,7 +42,7 @@ const PERMISSION_DEFS: {
   },
 ];
 
-const MANAGEABLE_ROLES = new Set(['staff', 'teacher']);
+const MANAGEABLE_ROLES = new Set(['staff', 'teacher', 'manager']);
 
 // ── Permission toggle cell ────────────────────────────────────────────────────
 
@@ -91,6 +98,8 @@ function PermToggle({
 
 export default function PermissionsPage() {
   const { user: me } = useAuth();
+  const { isSchool } = useBusinessType();
+  const permissionDefs = PERMISSION_DEFS.filter(p => isSchool || !p.key.startsWith('cbt_'));
   const isOwner   = me?.roles?.includes('business_owner') ?? false;
   const isManager = me?.roles?.includes('manager') ?? false;
 
@@ -206,7 +215,7 @@ export default function PermissionsPage() {
                   <th className="text-left py-3 px-4 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                     Staff Member
                   </th>
-                  {PERMISSION_DEFS.map(({ key, short, Icon }) => (
+                  {permissionDefs.map(({ key, short, Icon }) => (
                     <th
                       key={key}
                       className="text-center py-3 px-4 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider"
@@ -243,14 +252,14 @@ export default function PermissionsPage() {
                       </td>
 
                       {/* Permission toggles */}
-                      {PERMISSION_DEFS.map(({ key }) => (
+                      {permissionDefs.map(({ key }) => (
                         <td key={key} className="py-3 px-4 text-center">
                           <div className="flex justify-center">
                             <PermToggle
                               userId={u.id}
                               permission={key}
                               permissionId={userPerms?.get(key)}
-                              disabled={!effectiveCenterId}
+                              disabled={!effectiveCenterId || (!isOwner && ['cbt_approve','cbt_schedule','cbt_release','cbt_operate'].includes(key))}
                             />
                           </div>
                         </td>
@@ -266,7 +275,7 @@ export default function PermissionsPage() {
 
       {/* Permission legend */}
       <div className="grid sm:grid-cols-2 gap-4">
-        {PERMISSION_DEFS.map(({ key, label, description, Icon }) => (
+        {permissionDefs.map(({ key, label, description, Icon }) => (
           <div
             key={key}
             className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30"

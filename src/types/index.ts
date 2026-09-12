@@ -256,6 +256,8 @@ export interface Report {
 }
 
 export interface Grade {
+  cbtResultId?: string | null;
+  assessmentComponent?: string | null;
   id: string;
   tenantId: string;
   childId: string;
@@ -325,7 +327,7 @@ export interface Withdrawal {
   createdAt: string;
 }
 
-export type StaffPermissionType = 'validate_pickup' | 'show_center_qr';
+export type StaffPermissionType = 'validate_pickup' | 'show_center_qr' | 'cbt_author' | 'cbt_approve' | 'cbt_schedule' | 'cbt_grade' | 'cbt_release' | 'cbt_operate';
 
 export interface StaffPermission {
   id: string;
