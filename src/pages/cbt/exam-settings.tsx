@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../components/ui/button";
+import { inputClass, labelClass, summaryClass } from "./styles";
 
 export type ExamConfiguration = {
   centerId: string;
@@ -26,7 +27,6 @@ const localDate = (value: string) => {
     .toISOString()
     .slice(0, 16);
 };
-const inputClass = "block w-full border rounded p-2 bg-white dark:bg-slate-800";
 
 export function ExamSettings({
   initial,
@@ -82,8 +82,8 @@ export function ExamSettings({
   }
   return (
     <details className="space-y-3">
-      <summary>Edit exam settings</summary>
-      <label>
+      <summary className={summaryClass}>Edit exam settings</summary>
+      <label className={labelClass}>
         Name
         <input
           className={inputClass}
@@ -91,7 +91,7 @@ export function ExamSettings({
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
       </label>
-      <label>
+      <label className={labelClass}>
         Instructions
         <textarea
           className={inputClass}
@@ -107,7 +107,7 @@ export function ExamSettings({
           "negativeMarking",
         ] as const
       ).map((key) => (
-        <label className="block" key={key}>
+        <label className={labelClass} key={key}>
           {
             {
               durationMinutes: "Duration in minutes",
@@ -127,7 +127,7 @@ export function ExamSettings({
         </label>
       ))}
       {(["startDatetime", "endDatetime"] as const).map((key) => (
-        <label className="block" key={key}>
+        <label className={labelClass} key={key}>
           {key === "startDatetime"
             ? "Opens (local time)"
             : "Closes (local time)"}
@@ -139,7 +139,7 @@ export function ExamSettings({
           />
         </label>
       ))}
-      <label>
+      <label className={labelClass}>
         Navigation
         <select
           className={inputClass}
@@ -158,7 +158,7 @@ export function ExamSettings({
       </label>
       {(["shuffleQuestions", "shuffleOptions", "allowReview"] as const).map(
         (key) => (
-          <label className="block" key={key}>
+          <label className={labelClass} key={key}>
             <input
               type="checkbox"
               disabled={

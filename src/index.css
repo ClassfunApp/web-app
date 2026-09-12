@@ -42,6 +42,13 @@ body {
     -apple-system,
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  /* Default text colour so any element without an explicit colour stays
+     readable in both themes (browser default black is invisible on dark). */
+  color: #0f172a;
+}
+
+.dark body {
+  color: #e2e8f0;
 }
 
 /* ─── Keyframes ─────────────────────────────────────────────── */

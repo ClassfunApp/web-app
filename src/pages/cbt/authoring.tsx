@@ -12,6 +12,15 @@ import type { QuestionVersion } from "./question-editor";
 import { ExamSettings } from "./exam-settings";
 import type { ExamConfiguration } from "./exam-settings";
 import { drainPages, type Page } from "../../lib/cbt/paging";
+import {
+  buttonRowClass,
+  cardClass,
+  inputClass,
+  labelClass,
+  mutedClass,
+  panelClass,
+  summaryClass,
+} from "./styles";
 
 type Named = { id: string; name: string };
 type Calendar = { sessions: Named[]; terms: (Named & { sessionId: string })[] };
@@ -40,8 +49,6 @@ type Exam = Named &
     endDatetime: string;
     sections: Section[];
   };
-const inputClass = "block w-full border rounded p-2 bg-white dark:bg-slate-800";
-const panel = "rounded-xl border p-5 space-y-4 bg-white dark:bg-slate-900";
 const allPages = <T,>(path: string, params: Record<string, unknown>) =>
   drainPages<T>((offset, limit) =>
     get<Page<T>>(path, { ...params, offset, limit }),
@@ -199,7 +206,7 @@ function AuthoringWorkspace() {
   const editable =
     !examId || ["DRAFT", "CHANGES_REQUESTED"].includes(exam.data?.status ?? "");
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-5xl min-w-0 text-slate-900 dark:text-slate-100">
       <h1 className="text-2xl font-bold">CBT authoring</h1>
       {(error ||
         calendar.error ||
@@ -207,7 +214,7 @@ function AuthoringWorkspace() {
         exams.error ||
         versions.error ||
         exam.error) && (
-        <p role="alert" className="text-red-700">
+        <p role="alert" className="text-red-700 dark:text-red-400">
           {error ||
             errorMessage(
               calendar.error ||
@@ -218,10 +225,14 @@ function AuthoringWorkspace() {
             )}
         </p>
       )}
-      {notice && <p role="status">{notice}</p>}
-      <section className={panel}>
+      {notice && (
+        <p role="status" className="text-emerald-700 dark:text-emerald-400">
+          {notice}
+        </p>
+      )}
+      <section className={panelClass}>
         <h2 className="font-semibold">Class and subject</h2>
-        <label>
+        <label className={labelClass}>
           Campus
           <select
             className={inputClass}
@@ -241,7 +252,7 @@ function AuthoringWorkspace() {
             ))}
           </select>
         </label>
-        <label>
+        <label className={labelClass}>
           Class
           <select
             className={inputClass}
@@ -262,7 +273,7 @@ function AuthoringWorkspace() {
               ))}
           </select>
         </label>
-        <label>
+        <label className={labelClass}>
           Subject
           <select
             className={inputClass}
@@ -286,13 +297,13 @@ function AuthoringWorkspace() {
       {user?.roles?.some(
         (r) => r === "business_owner" || r === "super_admin",
       ) && (
-        <details className={panel}>
-          <summary>Academic calendar</summary>
+        <details className={panelClass}>
+          <summary className={summaryClass}>Academic calendar</summary>
           <p>
             Create a session first, then its terms. Dates use the school
             calendar; exam windows must fall within the term.
           </p>
-          <label>
+          <label className={labelClass}>
             Session for a new term
             <select
               className={inputClass}
@@ -310,7 +321,7 @@ function AuthoringWorkspace() {
             </select>
           </label>
           {(["name", "startsOn", "endsOn"] as const).map((key) => (
-            <label className="block" key={key}>
+            <label className={labelClass} key={key}>
               {key === "name"
                 ? "Name"
                 : key === "startsOn"
@@ -351,9 +362,9 @@ function AuthoringWorkspace() {
       )}
       {enabled && (
         <>
-          <section className={panel}>
+          <section className={panelClass}>
             <h2 className="font-semibold">Question banks</h2>
-            <label>
+            <label className={labelClass}>
               Bank
               <select
                 className={inputClass}
@@ -371,7 +382,7 @@ function AuthoringWorkspace() {
                 ))}
               </select>
             </label>
-            <label>
+            <label className={labelClass}>
               New bank name
               <input
                 className={inputClass}
@@ -400,7 +411,7 @@ function AuthoringWorkspace() {
             {bankId && (
               <>
                 <Button onClick={() => setQuestion(null)}>New question</Button>
-                <label>
+                <label className={labelClass}>
                   Review reason
                   <input
                     className={inputClass}
@@ -409,29 +420,36 @@ function AuthoringWorkspace() {
                   />
                 </label>
                 {versions.data?.map((v) => (
-                  <article key={v.id} className="border rounded p-3 space-y-2">
-                    <p>{v.questionText}</p>
-                    <p className="text-sm">
+                  <article key={v.id} className={cardClass}>
+                    <p className="whitespace-pre-wrap break-words">
+                      {v.questionText}
+                    </p>
+                    <p className={mutedClass}>
                       Version {v.version} · {v.status} · {v.defaultMarks} marks
                     </p>
-                    <Button variant="secondary" onClick={() => setQuestion(v)}>
-                      Revise as new version
-                    </Button>
-                    {(transitions[v.status] ?? [])
-                      .filter((s) => s !== "SCHEDULED")
-                      .map((status) => (
-                        <Button
-                          key={status}
-                          disabled={busy || !reason.trim()}
-                          onClick={() =>
-                            void run(() =>
-                              changeStatus("question", v.id, status),
-                            )
-                          }
-                        >
-                          {status.replaceAll("_", " ")}
-                        </Button>
-                      ))}
+                    <div className={buttonRowClass}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setQuestion(v)}
+                      >
+                        Revise as new version
+                      </Button>
+                      {(transitions[v.status] ?? [])
+                        .filter((s) => s !== "SCHEDULED")
+                        .map((status) => (
+                          <Button
+                            key={status}
+                            disabled={busy || !reason.trim()}
+                            onClick={() =>
+                              void run(() =>
+                                changeStatus("question", v.id, status),
+                              )
+                            }
+                          >
+                            {status.replaceAll("_", " ")}
+                          </Button>
+                        ))}
+                    </div>
                   </article>
                 ))}
                 {question !== undefined && (
@@ -457,9 +475,9 @@ function AuthoringWorkspace() {
               </>
             )}
           </section>
-          <section className={panel}>
+          <section className={panelClass}>
             <h2 className="font-semibold">Exams</h2>
-            <label>
+            <label className={labelClass}>
               Exam
               <select
                 className={inputClass}
@@ -481,7 +499,7 @@ function AuthoringWorkspace() {
             </label>
             {!examId && (
               <>
-                <label>
+                <label className={labelClass}>
                   Name
                   <input
                     className={inputClass}
@@ -491,7 +509,7 @@ function AuthoringWorkspace() {
                     }
                   />
                 </label>
-                <label>
+                <label className={labelClass}>
                   Session
                   <select
                     className={inputClass}
@@ -512,7 +530,7 @@ function AuthoringWorkspace() {
                     ))}
                   </select>
                 </label>
-                <label>
+                <label className={labelClass}>
                   Term
                   <select
                     className={inputClass}
@@ -531,7 +549,7 @@ function AuthoringWorkspace() {
                       ))}
                   </select>
                 </label>
-                <label>
+                <label className={labelClass}>
                   Instructions
                   <textarea
                     className={inputClass}
@@ -549,7 +567,7 @@ function AuthoringWorkspace() {
                     "endDatetime",
                   ] as const
                 ).map((key) => (
-                  <label className="block" key={key}>
+                  <label className={labelClass} key={key}>
                     {
                       {
                         durationMinutes: "Duration in minutes",
@@ -618,7 +636,9 @@ function AuthoringWorkspace() {
                   {exam.data.name} · {exam.data.status} ·{" "}
                   {exam.data.durationMinutes} minutes
                 </p>
-                <p>{exam.data.instructions}</p>
+                <p className="whitespace-pre-wrap break-words">
+                  {exam.data.instructions}
+                </p>
                 <p>
                   {new Date(exam.data.startDatetime).toLocaleString()} –{" "}
                   {new Date(exam.data.endDatetime).toLocaleString()}
@@ -647,7 +667,9 @@ function AuthoringWorkspace() {
                 ))}
                 {editable && (
                   <details>
-                    <summary>Edit paper sections</summary>
+                    <summary className={summaryClass}>
+                      Edit paper sections
+                    </summary>
                     <Button
                       variant="secondary"
                       onClick={() =>
@@ -676,8 +698,8 @@ function AuthoringWorkspace() {
                       Load saved sections
                     </Button>
                     {sections.map((s, index) => (
-                      <div key={index} className="border p-3 space-y-2">
-                        <label>
+                      <div key={index} className={cardClass}>
+                        <label className={labelClass}>
                           Section name
                           <input
                             className={inputClass}
@@ -693,7 +715,7 @@ function AuthoringWorkspace() {
                             }
                           />
                         </label>
-                        <label>
+                        <label className={labelClass}>
                           Section time in minutes (leave empty for untimed
                           sections)
                           <input
@@ -717,7 +739,7 @@ function AuthoringWorkspace() {
                             }
                           />
                         </label>
-                        <label>
+                        <label className={labelClass}>
                           Section navigation
                           <select
                             className={inputClass}
@@ -744,7 +766,10 @@ function AuthoringWorkspace() {
                         {versions.data
                           ?.filter((v) => v.status === "APPROVED")
                           .map((v) => (
-                            <label key={v.id} className="block">
+                            <label
+                              key={v.id}
+                              className="block break-words text-sm text-slate-700 dark:text-slate-300"
+                            >
                               <input
                                 type="checkbox"
                                 checked={s.questions.some(
@@ -812,7 +837,7 @@ function AuthoringWorkspace() {
                             {(
                               ["questionCount", "marksPerQuestion"] as const
                             ).map((key) => (
-                              <label className="block" key={key}>
+                              <label className={labelClass} key={key}>
                                 {key === "questionCount"
                                   ? "Question count"
                                   : "Marks each"}
@@ -909,7 +934,7 @@ function AuthoringWorkspace() {
                     </Button>
                   </details>
                 )}
-                <label>
+                <label className={labelClass}>
                   Exam review reason
                   <input
                     className={inputClass}
@@ -917,28 +942,30 @@ function AuthoringWorkspace() {
                     onChange={(e) => setReason(e.target.value)}
                   />
                 </label>
-                {(transitions[exam.data.status] ?? []).map((status) => (
-                  <Button
-                    key={status}
-                    disabled={busy || !reason.trim()}
-                    onClick={() =>
-                      void run(() => changeStatus("exam", examId, status))
-                    }
-                  >
-                    {status.replaceAll("_", " ")}
-                  </Button>
-                ))}
+                <div className={buttonRowClass}>
+                  {(transitions[exam.data.status] ?? []).map((status) => (
+                    <Button
+                      key={status}
+                      disabled={busy || !reason.trim()}
+                      onClick={() =>
+                        void run(() => changeStatus("exam", examId, status))
+                      }
+                    >
+                      {status.replaceAll("_", " ")}
+                    </Button>
+                  ))}
+                </div>
                 {["APPROVED", "SCHEDULED", "LIVE"].includes(
                   exam.data.status,
                 ) && (
-                  <div className="border-t pt-3 space-y-3">
+                  <div className="border-t border-slate-200 dark:border-slate-700 pt-3 space-y-3">
                     <h3 className="font-semibold">Student access</h3>
                     <p>
                       Issuing again replaces the student's PIN and requires them
                       to sign in again. Enrollment is checked by the school
                       server.
                     </p>
-                    <label>
+                    <label className={labelClass}>
                       Student
                       <select
                         className={inputClass}
@@ -992,7 +1019,7 @@ function AuthoringWorkspace() {
                         : "Issue or replace PIN"}
                     </Button>
                     {credentials && (
-                      <div className="border rounded p-4">
+                      <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 space-y-2 break-words">
                         <p>
                           Student ID: <b>{credentials.studentId}</b>
                         </p>
@@ -1004,7 +1031,7 @@ function AuthoringWorkspace() {
                           are not stored in this browser.
                         </p>
                         <a
-                          className="underline"
+                          className="underline text-indigo-600 dark:text-indigo-400"
                           href={`/cbt/${user?.tenantId}/${examId}`}
                           target="_blank"
                           rel="noreferrer"

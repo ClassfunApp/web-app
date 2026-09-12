@@ -6,6 +6,13 @@ import {
   parseList,
   questionProblem,
 } from "../../lib/cbt/authoring-rules";
+import {
+  buttonRowClass,
+  cardClass,
+  inputClass,
+  labelClass,
+  mutedClass,
+} from "./styles";
 
 type Option = { key: string; content: string; isCorrect: boolean };
 export type QuestionVersion = {
@@ -39,7 +46,6 @@ const types = [
   "MATCHING",
   "ORDERING",
 ];
-const inputClass = "block w-full border rounded p-2 bg-white dark:bg-slate-800";
 
 export function QuestionEditor({
   initial,
@@ -130,13 +136,13 @@ export function QuestionEditor({
     });
   }
   return (
-    <section className="border rounded p-4 space-y-3">
+    <section className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 space-y-3 text-slate-900 dark:text-slate-100">
       <h3 className="font-semibold">
         {initial
           ? `Revise question (creates version ${initial.version + 1} or later)`
           : "New question"}
       </h3>
-      <label>
+      <label className={labelClass}>
         Question type
         <select
           className={inputClass}
@@ -163,7 +169,7 @@ export function QuestionEditor({
           ))}
         </select>
       </label>
-      <label>
+      <label className={labelClass}>
         Topic
         <input
           className={inputClass}
@@ -171,7 +177,7 @@ export function QuestionEditor({
           onChange={(e) => setTopic(e.target.value)}
         />
       </label>
-      <label>
+      <label className={labelClass}>
         Difficulty
         <select
           className={inputClass}
@@ -183,7 +189,7 @@ export function QuestionEditor({
           ))}
         </select>
       </label>
-      <label>
+      <label className={labelClass}>
         Question
         <textarea
           className={inputClass}
@@ -191,7 +197,7 @@ export function QuestionEditor({
           onChange={(e) => setText(e.target.value)}
         />
       </label>
-      <label>
+      <label className={labelClass}>
         Marks
         <input
           className={inputClass}
@@ -204,10 +210,10 @@ export function QuestionEditor({
       </label>
       {usesOptions && (
         <fieldset className="space-y-2">
-          <legend>Options</legend>
+          <legend className="font-semibold">Options</legend>
           {options.map((o, i) => (
-            <div key={o.key} className="border rounded p-2">
-              <label>
+            <div key={o.key} className={cardClass}>
+              <label className={labelClass}>
                 {o.key}
                 <input
                   className={inputClass}
@@ -222,7 +228,7 @@ export function QuestionEditor({
                 />
               </label>
               {choice && (
-                <label>
+                <label className={labelClass}>
                   <input
                     type="checkbox"
                     checked={o.isCorrect}
@@ -242,7 +248,7 @@ export function QuestionEditor({
                 </label>
               )}
               {type === "MATCHING" && (
-                <label>
+                <label className={labelClass}>
                   Matching answer
                   <input
                     className={inputClass}
@@ -284,7 +290,7 @@ export function QuestionEditor({
         </fieldset>
       )}
       {type === "ORDERING" && (
-        <label>
+        <label className={labelClass}>
           Correct order (option labels separated by commas)
           <input
             className={inputClass}
@@ -292,7 +298,7 @@ export function QuestionEditor({
             onChange={(e) => setOrder(e.target.value)}
             placeholder={options.map((o) => o.key).join(", ")}
           />
-          <span className="block text-sm text-slate-500">
+          <span className={`block ${mutedClass}`}>
             Use the option labels, not the option text. Every label exactly
             once, in the correct sequence. Available:{" "}
             <b>{options.map((o) => o.key).join(", ") || "add options first"}</b>
@@ -306,7 +312,7 @@ export function QuestionEditor({
       )}
       {["FILL_BLANK", "SHORT_ANSWER"].includes(type) && (
         <>
-          <label>
+          <label className={labelClass}>
             Accepted answers (one per line; leave blank for manual short-answer
             marking)
             <textarea
@@ -315,7 +321,7 @@ export function QuestionEditor({
               onChange={(e) => setAccepted(e.target.value)}
             />
           </label>
-          <label>
+          <label className={labelClass}>
             <input
               type="checkbox"
               checked={caseSensitive}
@@ -326,7 +332,7 @@ export function QuestionEditor({
         </>
       )}
       {["ESSAY", "SHORT_ANSWER"].includes(type) && (
-        <label>
+        <label className={labelClass}>
           Marking rubric
           <textarea
             className={inputClass}
@@ -336,7 +342,7 @@ export function QuestionEditor({
         </label>
       )}
       {["MULTIPLE_SELECT", "MATCHING", "ORDERING"].includes(type) && (
-        <label>
+        <label className={labelClass}>
           <input
             type="checkbox"
             checked={partial}
@@ -345,7 +351,7 @@ export function QuestionEditor({
           Allow partial credit
         </label>
       )}
-      <label>
+      <label className={labelClass}>
         Explanation
         <textarea
           className={inputClass}
@@ -358,7 +364,7 @@ export function QuestionEditor({
           {problem}
         </p>
       )}
-      <div className="flex gap-2">
+      <div className={buttonRowClass}>
         <Button variant="secondary" disabled={busy} onClick={onCancel}>
           Cancel
         </Button>
