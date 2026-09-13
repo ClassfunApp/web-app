@@ -186,6 +186,21 @@ export interface Attendance {
   createdAt: string;
 }
 
+export interface StaffTimeEntry {
+  id: string;
+  tenantId: string;
+  centerId: string;
+  userId: string;
+  clockedInAt: string;
+  clockedOutAt: string | null;
+  clockInLatitude: string | null;
+  clockInLongitude: string | null;
+  clockOutLatitude: string | null;
+  clockOutLongitude: string | null;
+  user?: Pick<User, 'id' | 'fullName' | 'email'>;
+  center?: Pick<Center, 'id' | 'name'>;
+}
+
 export interface InvoiceLineItem {
   id: string;
   feePaymentId: string;

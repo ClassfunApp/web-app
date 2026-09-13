@@ -39,6 +39,7 @@ import TimetablePage from "./pages/timetable/index";
 import GradingPage from "./pages/cbt/grading";
 import ExamOperationsPage from "./pages/cbt/operations";
 import AuthoringPage from "./pages/cbt/authoring";
+import TimeClockPage from "./pages/time-clock";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -94,6 +95,7 @@ export default function StaffApp() {
                 element={<EnrolmentRequestsPage />}
               />
               <Route path="attendance" element={<AttendancePage />} />
+              <Route path="time-clock" element={<TimeClockPage />} />
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="staff" element={<StaffPage />} />
               <Route path="pickup-codes" element={<PickupCodesPage />} />

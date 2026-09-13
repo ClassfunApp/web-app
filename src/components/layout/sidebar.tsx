@@ -24,6 +24,7 @@ import {
   GraduationCap,
   Inbox,
   CalendarDays,
+  Clock3,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../hooks/use-auth";
@@ -94,6 +95,7 @@ export function Sidebar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isSchool, terms } = useBusinessType();
+  const canTrackStaff = user?.roles?.some((role) => role === "business_owner" || role === "manager") ?? false;
 
   const mainNav = [
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -104,6 +106,7 @@ export function Sidebar() {
     { to: "/enrollments", icon: ClipboardList, label: "Enrollments" },
     { to: "/enrolment-requests", icon: Inbox, label: "Enrolment Requests" },
     { to: "/attendance", icon: CalendarCheck, label: "Attendance" },
+    ...(canTrackStaff ? [{ to: "/time-clock", icon: Clock3, label: "Staff Time" }] : []),
     { to: "/payments", icon: CreditCard, label: "Payments" },
     { to: "/wallet", icon: Wallet, label: "Wallet" },
     { to: "/reports", icon: FileText, label: "Reports" },
