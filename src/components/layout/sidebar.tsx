@@ -31,6 +31,7 @@ import { useAuth } from "../../hooks/use-auth";
 import { useBusinessType } from "../../hooks/use-business-type";
 import { useCenters } from "../../hooks/queries/use-centers";
 import { ClassfunLogo } from "../ui/classfun-logo";
+import { isTeacherOnly } from "../../lib/teacher-access";
 
 const STATUS_DOT: Record<string, string> = {
   pending: "bg-amber-400",
@@ -96,6 +97,7 @@ export function Sidebar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isSchool, terms } = useBusinessType();
   const canTrackStaff = user?.roles?.some((role) => role === "business_owner" || role === "manager") ?? false;
+  const teacherOnly = isTeacherOnly(user);
 
   const mainNav = [
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -208,7 +210,7 @@ export function Sidebar() {
               <ChevronDown size={12} className="text-slate-300 dark:text-slate-600" />
             </div>
             <div className="space-y-0.5 stagger-children">
-              {mainNav.map((item) => (
+              {(teacherOnly ? mainNav.filter((item) => ["/", "/timetable", "/attendance", "/grades", "/reports", "/cbt-grading", "/cbt-authoring"].includes(item.to)) : mainNav).map((item) => (
                 <NavItem
                   key={item.to}
                   to={item.to}
@@ -222,7 +224,7 @@ export function Sidebar() {
           </div>
 
           {/* Management */}
-          <div>
+          {!teacherOnly && <div>
             <div className="flex items-center justify-between px-3 mb-2">
               <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                 Management
@@ -276,7 +278,7 @@ export function Sidebar() {
                 )}
               </NavLink>
             </div>
-          </div>
+          </div>}
 
           {/* Billing — owner only */}
           {isOwner && (

@@ -1,9 +1,16 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
+import { useAuth } from '../../hooks/use-auth';
+import { isTeacherOnly, TEACHER_PATHS } from '../../lib/teacher-access';
 
 export function DashboardLayout() {
   const { pathname } = useLocation();
+  const { user } = useAuth();
+
+  if (isTeacherOnly(user) && !TEACHER_PATHS.has(pathname)) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-[#f0f3f9] dark:bg-slate-950 overflow-x-hidden">

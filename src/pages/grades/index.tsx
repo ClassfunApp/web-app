@@ -15,6 +15,8 @@ import { Loading } from '../../components/ui/loading';
 import { Badge } from '../../components/ui/badge';
 import { formatDateTime } from '../../lib/utils';
 import type { Grade } from '../../types';
+import { useAuth } from '../../hooks/use-auth';
+import { isTeacherOnly } from '../../lib/teacher-access';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -203,6 +205,8 @@ function GradeModal({
 // ── Grade row ─────────────────────────────────────────────────────────────────
 
 function GradeRow({ grade }: { grade: Grade }) {
+  const { user } = useAuth();
+  const teacherOnly = isTeacherOnly(user);
   const publishMutation   = usePublishGrade();
   const unpublishMutation = useUnpublishGrade();
   const deleteMutation    = useDeleteGrade();
@@ -277,7 +281,7 @@ function GradeRow({ grade }: { grade: Grade }) {
         {/* Actions */}
         <td className="py-3 px-4">
           <div className="flex items-center gap-1.5 justify-end">
-            {grade.isPublished ? (
+            {!teacherOnly && (grade.isPublished ? (
               <button
                 onClick={() => unpublishMutation.mutate(grade.id)}
                 disabled={unpublishMutation.isPending || !!grade.cbtResultId}
@@ -293,7 +297,7 @@ function GradeRow({ grade }: { grade: Grade }) {
               >
                 <Eye size={11} />Publish
               </button>
-            )}
+            ))}
             {!grade.isPublished && (
               <button
                 disabled={!!grade.cbtResultId}

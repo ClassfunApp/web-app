@@ -14,6 +14,9 @@ import ResetPasswordPage from "./pages/auth/reset-password";
 
 // Dashboard pages
 import DashboardPage from "./pages/dashboard";
+import TeacherDashboardPage from "./pages/teacher-dashboard";
+import { useAuth } from "./hooks/use-auth";
+import { isTeacherOnly } from "./lib/teacher-access";
 import CentersPage from "./pages/centers/index";
 import ChildrenPage from "./pages/children/index";
 import ChildDetailPage from "./pages/children/detail";
@@ -50,6 +53,11 @@ const queryClient = new QueryClient({
   },
 });
 
+function HomePage() {
+  const { user } = useAuth();
+  return isTeacherOnly(user) ? <TeacherDashboardPage /> : <DashboardPage />;
+}
+
 export default function StaffApp() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -82,7 +90,7 @@ export default function StaffApp() {
                 </ProtectedRoute>
               }
             >
-              <Route index element={<DashboardPage />} />
+              <Route index element={<HomePage />} />
               <Route path="centers" element={<CentersPage />} />
               <Route path="children" element={<ChildrenPage />} />
               <Route path="children/:id" element={<ChildDetailPage />} />

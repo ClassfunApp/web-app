@@ -3,6 +3,7 @@ import { LogOut, Bell, Search, HelpCircle, ChevronDown, Sun, Moon } from 'lucide
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/use-auth';
 import { useTheme } from '../../hooks/use-theme';
+import { isTeacherOnly } from '../../lib/teacher-access';
 
 const PAGE_TITLES: Record<string, string> = {
   '/': 'Dashboard',
@@ -47,7 +48,7 @@ export function Header() {
     }
   };
 
-  const title = Object.entries(PAGE_TITLES).find(([path]) =>
+  const title = isTeacherOnly(user) && location.pathname === '/' ? 'Teacher Dashboard' : Object.entries(PAGE_TITLES).find(([path]) =>
     path === '/' ? location.pathname === '/' : location.pathname.startsWith(path),
   )?.[1] ?? 'Dashboard';
 
@@ -61,11 +62,11 @@ export function Header() {
       <h1 className="text-lg lg:text-[22px] font-bold text-slate-800 dark:text-slate-100 tracking-tight">{title}</h1>
 
       {/* Search - hidden on mobile */}
-      <div className="hidden md:flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full px-4 py-2 w-72 text-sm text-slate-400 dark:text-slate-400 cursor-pointer hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
+      {!isTeacherOnly(user) && <div className="hidden md:flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full px-4 py-2 w-72 text-sm text-slate-400 dark:text-slate-400 cursor-pointer hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
         <Search size={15} className="shrink-0 text-slate-400 dark:text-slate-500" />
         <span className="flex-1 text-slate-400 dark:text-slate-500 text-[13px]">Search children, families…</span>
         <kbd className="text-[10px] text-slate-400 dark:text-slate-500 bg-slate-200 dark:bg-slate-700 rounded px-1.5 py-0.5 font-mono">⌘K</kbd>
-      </div>
+      </div>}
 
       {/* Right */}
       <div className="flex items-center gap-1 lg:gap-2">
