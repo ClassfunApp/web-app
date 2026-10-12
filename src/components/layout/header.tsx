@@ -8,7 +8,7 @@ import { isTeacherOnly } from '../../lib/teacher-access';
 const PAGE_TITLES: Record<string, string> = {
   '/': 'Dashboard',
   '/centers': 'Centers',
-  '/children': 'Children',
+  '/children': 'Students',
   '/families': 'Families',
   '/activities': 'Activities',
   '/enrollments': 'Enrollments',

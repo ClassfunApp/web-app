@@ -101,7 +101,7 @@ export function Sidebar() {
 
   const mainNav = [
     { to: "/", icon: LayoutDashboard, label: "Dashboard" },
-    { to: "/children", icon: Baby, label: isSchool ? "Students" : "Children" },
+    { to: "/children", icon: Baby, label: "Students" },
     { to: "/families", icon: UsersRound, label: "Families" },
     { to: "/activities", icon: Dumbbell, label: terms.activities },
     { to: "/timetable", icon: CalendarDays, label: "Timetable" },

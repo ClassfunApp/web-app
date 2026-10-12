@@ -45,7 +45,7 @@ export default function ChildrenPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Children</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Students</h1>
         <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
           <Plus size={16} className="mr-2" /> Add Child
         </Button>
