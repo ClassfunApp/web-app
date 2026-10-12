@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import type { ReactNode } from 'react';
 import { X } from 'lucide-react';
 
@@ -34,15 +35,17 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
 
   if (!open) return null;
 
-  return (
+  // Portal to <body>: pages animate in with a retained transform, which would make
+  // the page (not the viewport) the containing block for this fixed overlay.
+  return createPortal(
     <div
       ref={overlayRef}
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-[2px] p-4 animate-fade-in"
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
-      <div className={`w-full ${sizeClasses[size]} bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5)] animate-scale-in`}>
+      <div className={`w-full ${sizeClasses[size]} max-h-full flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)] dark:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5)] animate-scale-in`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+        <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
           <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">{title}</h3>
           <button
             onClick={onClose}
@@ -51,9 +54,10 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
             <X size={16} />
           </button>
         </div>
-        {/* Body */}
-        <div className="px-6 py-5">{children}</div>
+        {/* Body scrolls when the content is taller than the viewport */}
+        <div className="px-6 py-5 overflow-y-auto">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
